@@ -28,7 +28,7 @@ public class HSVSaturationProcessor implements VisionProcessor {
     double rightSpikeSaturation = 0;
 
     // These are the values that we have to tune at each competition, different for BLUE_LEFT/RED_LEFT and BLUE_RIGHT/RED_RIGHT.
-    public` double LEFT_SPIKE_SATURATION_BASELINE = 0;
+    public double LEFT_SPIKE_SATURATION_BASELINE = 0;
     public double CENTER_SPIKE_SATURATION_BASELINE = 0;
     public double RIGHT_SPIKE_SATURATION_BASELINE =  0;
 
@@ -60,7 +60,7 @@ public class HSVSaturationProcessor implements VisionProcessor {
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight,float scaleBmpPxToCanvasPx , float scaleCanvasDensity, Object userContext) {
 
         //draw the spike line bounding boxes on the canvas
-        drawRectangles(canvas, scaleBmpPxToCanvasPx);
+        //drawRectangles(canvas, scaleBmpPxToCanvasPx);
 //        //draw left spike box
 //        Paint paint = new Paint();
 //        paint.setColor(Color.GREEN);
