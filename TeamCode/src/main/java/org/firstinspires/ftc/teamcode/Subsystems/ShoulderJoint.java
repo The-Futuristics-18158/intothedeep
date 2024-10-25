@@ -38,6 +38,15 @@ public class ShoulderJoint extends SubsystemBase {
      * Place any code here you wish to have run periodically */
     @Override
     public void periodic() {
+//        RobotContainer.ActiveOpMode.telemetry.addData("Shoulder Target: ", shoulderMotor.getTargetPosition());
+//        RobotContainer.ActiveOpMode.telemetry.addData("Shoulder Current: ", shoulderMotor.getCurrentPosition());
+//
+//        RobotContainer.ActiveOpMode.telemetry.update();
+
+        RobotContainer.DBTelemetry.addData("Shoulder Target: ", shoulderMotor.getTargetPosition());
+        RobotContainer.DBTelemetry.addData("Shoulder Current: ", shoulderMotor.getCurrentPosition());
+
+        RobotContainer.DBTelemetry.update();
 
     }
 
