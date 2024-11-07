@@ -16,10 +16,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 //import org.firstinspires.ftc.teamcode.Commands.LinearSlideMiddle;
 import org.firstinspires.ftc.teamcode.CommandGroups.ArmStowHigh;
 import org.firstinspires.ftc.teamcode.CommandGroups.ExampleCommandGroup;
+import org.firstinspires.ftc.teamcode.Commands.ChangeToGreen;
 import org.firstinspires.ftc.teamcode.Commands.FollowPath;
 import org.firstinspires.ftc.teamcode.Commands.ManualDrive;
 //import org.firstinspires.ftc.teamcode.Commands.ToggleClaw;
 //import org.firstinspires.ftc.teamcode.Subsystems.Claw;
+import org.firstinspires.ftc.teamcode.Subsystems.Blinkin;
 import org.firstinspires.ftc.teamcode.Subsystems.Camera;
 
 import org.firstinspires.ftc.teamcode.Subsystems.ClawCamera;
@@ -87,6 +89,8 @@ public class RobotContainer {
 
     public static Claw claw;
     //
+    //Blinkin!
+    public static Blinkin blinkin;
 
     // Robot initialization for teleop - Run this once at start of teleop
     public static void Init_TeleOp(CommandOpMode mode) {
@@ -114,7 +118,8 @@ public class RobotContainer {
 
         driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(()->wristRotateServo.RotateTo(125)));
 
-        driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ArmStowHigh());
+        //driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ArmStowHigh());
+        driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ChangeToGreen());
 
         driverOp.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(()->elbowJoint.RotateTo(0)));
 
