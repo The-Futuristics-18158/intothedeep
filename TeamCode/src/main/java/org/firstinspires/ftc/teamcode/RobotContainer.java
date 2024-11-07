@@ -199,6 +199,7 @@ public class RobotContainer {
         claw = new Claw();
         // insert other subsystems here
         // claw = new Claw();
+        blinkin = new Blinkin();
 
     }
 
