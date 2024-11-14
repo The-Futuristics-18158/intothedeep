@@ -11,6 +11,7 @@ public class BlinkinColours {
         REDALLIANCE,
         ALLIANCESAMPLE,
         NETURALSAMPLE,
+        PIECEGRABED,
         APRILTAGDETECTED,
     }
 
@@ -26,6 +27,8 @@ public class BlinkinColours {
             RobotContainer.blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.BEATS_PER_MINUTE_FOREST_PALETTE);
         } else if (colour == BlinkinColour.NETURALSAMPLE) {
             RobotContainer.blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+        } else if (colour == BlinkinColour.PIECEGRABED) {
+            RobotContainer.blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.LIME);
         } else if (colour == BlinkinColour.APRILTAGDETECTED) {
             RobotContainer.blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
         }
