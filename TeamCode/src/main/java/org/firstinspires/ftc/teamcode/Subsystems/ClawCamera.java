@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.vision.DetectedColorWithAngle;
 import org.firstinspires.ftc.vision.VisionPortal;
 import java.util.List;
 
-
 /** Subsystem */
 public class ClawCamera extends SubsystemBase {
 
@@ -29,15 +28,14 @@ public class ClawCamera extends SubsystemBase {
         myColorDetectProcessor = new ColorDetect();
         myColorAndOrienDetProcessor = new ColorAndOrientationDetect();
 
+        myColorAndOrienDetProcessor.setMinBoundingBoxArea(0.05);
         CameraPortal = new VisionPortal.Builder()
                 .setCamera(RobotContainer.ActiveOpMode.hardwareMap.get(WebcamName.class, cameraName))
-                .addProcessors(myColorAndOrienDetProcessor) // add all the processors here
-                //.setCameraResolution(new Size(640, 480))
+                .addProcessors(myColorAndOrienDetProcessor)
                 .setCameraResolution(new Size(640,480))
                 .enableLiveView(false)
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
-
         RobotContainer.DashBoard.startCameraStream(CameraPortal, 0);
 
     }
@@ -63,16 +61,13 @@ public class ClawCamera extends SubsystemBase {
         RobotContainer.DBTelemetry.update();
     }
 
-
     // Method to update the dashboard with actual detected values
     private void updateDashboard() {
         // Assume detectedColors is a list of DetectedColorWithAngle objects containing the detected values
-        List<DetectedColorWithAngle> detectedColors = GetCurrentColAndAng(); // Replace with your actual method to get detected colors
-
+        List<DetectedColorWithAngle> detectedColors = GetCurrentColAndAng();
         for (int i = 0; i < 4; i++) {
             if (i < detectedColors.size()) {
                 DetectedColorWithAngle detectedColor = detectedColors.get(i);
-
                 // Update the dashboard with the actual detected values
                 RobotContainer.DBTelemetry.addData("Detected Color " + (i + 1), detectedColor.getColor());
                 RobotContainer.DBTelemetry.addData("Color " + (i + 1) + " Center",
@@ -91,7 +86,6 @@ public class ClawCamera extends SubsystemBase {
         // Update the telemetry to reflect new data
         RobotContainer.DBTelemetry.update();
     }
-
 
     // get current AprilTag detections (if any) from camera
     // returns list containing info on each tag detected

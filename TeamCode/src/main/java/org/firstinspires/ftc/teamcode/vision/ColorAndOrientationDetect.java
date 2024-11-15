@@ -30,7 +30,7 @@ public class ColorAndOrientationDetect implements VisionProcessor {
     private final Scalar upperYellow = new Scalar(204.0, 225.0, 75.0); // Adjusted yellow upper bound
 
     // Define a minimum bounding box area (1% of total frame area for 640x480)
-    private final double MIN_BOUNDING_BOX_AREA = 0.08 * 640 * 480;  // 3072 pixels
+    private double MIN_BOUNDING_BOX_AREA = 0.05 * 640 * 480;  // 3072 pixels
 
     // List to store detected colors with angles
     private final List<DetectedColorWithAngle> detectedColors = new ArrayList<>();
@@ -38,6 +38,11 @@ public class ColorAndOrientationDetect implements VisionProcessor {
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
         // Initialize any necessary variables or settings here
+    }
+
+    //set the min detect box , percentage from 0.01-1
+    public void setMinBoundingBoxArea(double percentSet){
+        MIN_BOUNDING_BOX_AREA = percentSet *640 * 480;
     }
 
     @Override
