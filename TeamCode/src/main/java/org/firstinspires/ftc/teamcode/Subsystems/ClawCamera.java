@@ -1,12 +1,9 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import android.util.Size;
-
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RobotContainer;
-import org.firstinspires.ftc.teamcode.vision.ColorDetect;
-import org.firstinspires.ftc.teamcode.vision.DetectedColor;
 import org.firstinspires.ftc.teamcode.vision.ColorAndOrientationDetect;
 import org.firstinspires.ftc.teamcode.vision.DetectedColorWithAngle;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -15,8 +12,6 @@ import java.util.List;
 /** Subsystem */
 public class ClawCamera extends SubsystemBase {
 
-    // Used for managing the color detection process.
-    private ColorDetect  myColorDetectProcessor;
     private ColorAndOrientationDetect myColorAndOrienDetProcessor;
     // Local objects and variables here
     private final VisionPortal CameraPortal;
@@ -25,9 +20,7 @@ public class ClawCamera extends SubsystemBase {
 
     /** Place code here to initialize subsystem */
     public ClawCamera(String cameraName) {
-        myColorDetectProcessor = new ColorDetect();
         myColorAndOrienDetProcessor = new ColorAndOrientationDetect();
-
         myColorAndOrienDetProcessor.setMinBoundingBoxArea(0.05);
         CameraPortal = new VisionPortal.Builder()
                 .setCamera(RobotContainer.ActiveOpMode.hardwareMap.get(WebcamName.class, cameraName))
@@ -37,7 +30,6 @@ public class ClawCamera extends SubsystemBase {
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
         RobotContainer.DashBoard.startCameraStream(CameraPortal, 0);
-
     }
     @Override
     public void periodic() {
@@ -87,22 +79,14 @@ public class ClawCamera extends SubsystemBase {
         RobotContainer.DBTelemetry.update();
     }
 
-    // get current AprilTag detections (if any) from camera
-    // returns list containing info on each tag detected
-    public List<DetectedColor> GetCurrentColorDetections() {
-        return myColorDetectProcessor.getDetectedColors();
-    }
+    // returns list containing info on each specimen detected
     public List<DetectedColorWithAngle> GetCurrentColAndAng(){
         return myColorAndOrienDetProcessor.getDetectedColorsAndAng();
     }
 
-    // get camera frames per second
-    public double GetCameraFPS () {
-        return CameraPortal.getFps();
+    // use to turn on/off color and angle detect processing
+    public void EnableDetectProcessing (boolean enable) {
+        CameraPortal.setProcessorEnabled(myColorAndOrienDetProcessor, enable);
     }
 
-    // use to turn on/off AprilTag processing
-    public void EnableColorDetectProcessing (boolean enable) {
-        CameraPortal.setProcessorEnabled(myColorDetectProcessor, enable);
-    }
 }
