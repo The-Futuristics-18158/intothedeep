@@ -55,21 +55,21 @@ public class ColorAndOrientationDetect implements VisionProcessor {
         // Step 1: Detect Blue and mask it out
         Mat maskBlue = new Mat();
         Core.inRange(ycrcb, lowerBlue, upperBlue, maskBlue);
-        processColorWithOrientation(maskBlue, hsvMat, input, new Scalar(255, 0, 0), "Blue", 500);
+        processColorWithOrientation(maskBlue, hsvMat, input, new Scalar(255, 0, 0), 500);
         Core.bitwise_not(maskBlue, maskBlue);
         Core.bitwise_and(ycrcb, ycrcb, ycrcb, maskBlue);  // Mask out blue region
 
         // Step 2: Detect Red on the remaining image
         Mat maskRed = new Mat();
         Core.inRange(ycrcb, lowerRed, upperRed, maskRed);
-        processColorWithOrientation(maskRed, hsvMat, input, new Scalar(0, 255, 0), "Red", 500);
+        processColorWithOrientation(maskRed, hsvMat, input, new Scalar(0, 255, 0), 500);
         Core.bitwise_not(maskRed, maskRed);
         Core.bitwise_and(ycrcb, ycrcb, ycrcb, maskRed);  // Mask out red region
 
         // Step 3: Detect Yellow on the remaining image
         Mat maskYellow = new Mat();
         Core.inRange(ycrcb, lowerYellow, upperYellow, maskYellow);
-        processColorWithOrientation(maskYellow, hsvMat, input, new Scalar(0, 255, 255), "Yellow", 500);
+        processColorWithOrientation(maskYellow, hsvMat, input, new Scalar(0, 255, 255), 500);
         Core.bitwise_not(maskYellow, maskYellow);
         Core.bitwise_and(ycrcb, ycrcb, ycrcb, maskYellow);  // Mask out yellow region
 
@@ -83,7 +83,7 @@ public class ColorAndOrientationDetect implements VisionProcessor {
         return null;
     }
 
-    private void processColorWithOrientation(Mat mask, Mat hsvMat, Mat frame, Scalar boxColor, String colorName, int minArea) {
+    private void processColorWithOrientation(Mat mask, Mat hsvMat, Mat frame, Scalar boxColor, int minArea) {
         // Find contours on the mask
         List<MatOfPoint> contours = new ArrayList<>();
         Mat hierarchy = new Mat();
@@ -104,10 +104,14 @@ public class ColorAndOrientationDetect implements VisionProcessor {
                 // Get the orientation of this object
                 double angle = getAngle(contour);
 
+                // Define the color array (e.g., from HSV or YCrCb values)
+                double[] detectedColor = {avgSaturation, 0, 0}; // Replace with actual logic for [Y, B, R]
+
                 // Create a new DetectedColorWithAngle and add it to the list
-                DetectedColorWithAngle detectedColor = new DetectedColorWithAngle(
-                        colorName, rect, boundingBoxArea, angle, new double[]{avgSaturation, 0, 0}); // Sample color values
-                detectedColors.add(detectedColor);
+                DetectedColorWithAngle detectedColorWithAngle = new DetectedColorWithAngle(
+                        rect, boundingBoxArea, angle, detectedColor
+                );
+                detectedColors.add(detectedColorWithAngle);
 
                 // Draw the bounding box around the region
                 Imgproc.rectangle(frame, rect, boxColor, 2);
