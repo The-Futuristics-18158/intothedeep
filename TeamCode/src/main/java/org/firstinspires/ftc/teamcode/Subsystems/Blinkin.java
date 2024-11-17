@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.RobotContainer;
+import org.firstinspires.ftc.teamcode.utility.BlinkinColour;
 
 
 /** Subsystem */
@@ -16,12 +17,13 @@ public class Blinkin extends SubsystemBase {
     private RevBlinkinLedDriver.BlinkinPattern pattern;
 
 
+
     /** Place code here to initialize subsystem */
     public Blinkin() {
 
         // Creates a Servo using the hardware map
         blinkinLedDriver = RobotContainer.ActiveOpMode.hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
-        pattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
+        pattern = BlinkinColour.RED_ALLIANCE.getPattern();
        blinkinLedDriver.setPattern(pattern);
     }
 
