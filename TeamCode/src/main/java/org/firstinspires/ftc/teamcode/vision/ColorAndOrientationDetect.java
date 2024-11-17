@@ -30,7 +30,7 @@ public class ColorAndOrientationDetect implements VisionProcessor {
     private final Scalar upperYellow = new Scalar(204.0, 225.0, 75.0); // Adjusted yellow upper bound
 
     // Define a minimum bounding box area (1% of total frame area for 640x480)
-    private double MIN_BOUNDING_BOX_AREA = 0.05 * 640 * 480;  // 3072 pixels
+    private double MIN_BOUNDING_BOX_AREA = 0.08 * 640 * 480;  // 3072 pixels
 
     // List to store detected colors with angles
     private final List<DetectedColorWithAngle> detectedColors = new ArrayList<>();
@@ -38,11 +38,6 @@ public class ColorAndOrientationDetect implements VisionProcessor {
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
         // Initialize any necessary variables or settings here
-    }
-
-    //set the min detect box , percentage from 0.01-1
-    public void setMinBoundingBoxArea(double percentSet){
-        MIN_BOUNDING_BOX_AREA = percentSet *640 * 480;
     }
 
     @Override
@@ -109,9 +104,6 @@ public class ColorAndOrientationDetect implements VisionProcessor {
                 // Get the orientation of this object
                 double angle = getAngle(contour);
 
-                // Calculate the center of the bounding box
-                Point center = new Point(rect.x + rect.width / 2.0, rect.y + rect.height / 2.0);
-
                 // Create a new DetectedColorWithAngle and add it to the list
                 DetectedColorWithAngle detectedColor = new DetectedColorWithAngle(
                         colorName, rect, boundingBoxArea, angle, new double[]{avgSaturation, 0, 0}); // Sample color values
@@ -119,10 +111,6 @@ public class ColorAndOrientationDetect implements VisionProcessor {
 
                 // Draw the bounding box around the region
                 Imgproc.rectangle(frame, rect, boxColor, 2);
-
-                // Put text label near the bounding box with the color name, saturation value, and orientation
-                String label = colorName + ": " + String.format("%.2f deg", angle);
-                Imgproc.putText(frame, label, new Point(rect.x, rect.y - 5), Imgproc.FONT_HERSHEY_SIMPLEX, 0.7, boxColor, 2);
             }
         }
 
@@ -133,7 +121,6 @@ public class ColorAndOrientationDetect implements VisionProcessor {
         }
     }
 
-    // Function to get the average saturation in a given region
     protected double getAvgSaturation(Mat hsvInput, Rect rect) {
         Mat submat = hsvInput.submat(rect);
         Scalar meanVal = Core.mean(submat);
@@ -141,7 +128,14 @@ public class ColorAndOrientationDetect implements VisionProcessor {
         return meanVal.val[1]; // Return the saturation channel value
     }
 
-    // Function to detect the orientation of the object and return angle in degrees
+    // Add a setter method for updating the bounding box area dynamically
+    public void setMinBoundingBoxArea(double ratio) {
+        if (ratio <= 0 || ratio > 1) {
+            throw new IllegalArgumentException("Ratio must be between 0 and 1.");
+        }
+        this.MIN_BOUNDING_BOX_AREA = ratio * 640 * 480; // Calculate new area based on ratio
+    }
+
     private double getAngle(MatOfPoint contour) {
         MatOfPoint2f contour2f = new MatOfPoint2f(contour.toArray());
         RotatedRect rotatedRect = Imgproc.minAreaRect(contour2f);
@@ -154,9 +148,43 @@ public class ColorAndOrientationDetect implements VisionProcessor {
         return angle;
     }
 
-    // Public method to retrieve the list of detected colors with angles
     public List<DetectedColorWithAngle> getDetectedColorsAndAng() {
         return detectedColors;
+    }
+
+    public boolean isColorExist(String colorName) {
+        return detectedColors.stream().anyMatch(color -> color.getColorName().equalsIgnoreCase(colorName));
+    }
+
+    public double getAngle(String colorName) {
+        DetectedColorWithAngle mostCenteredColor = getMostCenteredBoundingBox(colorName);
+        return mostCenteredColor != null ? mostCenteredColor.getAngle() : Double.NaN;
+    }
+
+    public double[] getCenter(String colorName) {
+        DetectedColorWithAngle mostCenteredColor = getMostCenteredBoundingBox(colorName);
+        if (mostCenteredColor != null) {
+            Point center = mostCenteredColor.getCenter();
+            return new double[]{center.x, center.y};
+        }
+        return new double[]{Double.NaN, Double.NaN};
+    }
+
+    private DetectedColorWithAngle getMostCenteredBoundingBox(String colorName) {
+        DetectedColorWithAngle mostCentered = null;
+        double minCenterDistance = Double.MAX_VALUE;
+
+        for (DetectedColorWithAngle color : detectedColors) {
+            if (color.getColorName().equalsIgnoreCase(colorName)) {
+                Point center = color.getCenter();
+                double centerDistance = Math.hypot(center.x - 320, center.y - 240); // Distance to center of 640x480
+                if (centerDistance < minCenterDistance) {
+                    minCenterDistance = centerDistance;
+                    mostCentered = color;
+                }
+            }
+        }
+        return mostCentered;
     }
 
     @Override

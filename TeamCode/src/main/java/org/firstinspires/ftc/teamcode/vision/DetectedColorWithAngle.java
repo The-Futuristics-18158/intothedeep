@@ -16,6 +16,10 @@ public class DetectedColorWithAngle extends DetectedColor {
         this.center = calculateCenter(boundingBox);
     }
 
+    public String getColorName() {
+        return colorName;
+    }
+
     // Calculate the center of the bounding box
     private Point calculateCenter(Rect boundingBox) {
         double centerX = boundingBox.x + boundingBox.width / 2.0;

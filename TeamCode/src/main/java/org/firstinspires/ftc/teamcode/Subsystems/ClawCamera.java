@@ -84,6 +84,23 @@ public class ClawCamera extends SubsystemBase {
         return myColorAndOrienDetProcessor.getDetectedColorsAndAng();
     }
 
+    // Returns true if the specified color is detected in the frame
+    public boolean isColorExist(String colorName) {
+        return myColorAndOrienDetProcessor.isColorExist(colorName);
+    }
+
+    // Returns the angle of the most centered bounding box for the specified color
+    // Returns Double.NaN if the color is not detected
+    public double getAngle(String colorName) {
+        return myColorAndOrienDetProcessor.getAngle(colorName);
+    }
+
+    // Returns the center (x, y) of the most centered bounding box for the specified color
+    // Returns {Double.NaN, Double.NaN} if the color is not detected
+    public double[] getCenter(String colorName) {
+        return myColorAndOrienDetProcessor.getCenter(colorName);
+    }
+
     // use to turn on/off color and angle detect processing
     public void EnableDetectProcessing (boolean enable) {
         CameraPortal.setProcessorEnabled(myColorAndOrienDetProcessor, enable);
