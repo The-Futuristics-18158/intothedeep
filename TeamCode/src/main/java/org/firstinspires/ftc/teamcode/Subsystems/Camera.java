@@ -36,11 +36,11 @@ public class Camera extends SubsystemBase {
                 .setDrawTagOutline(true)
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
-                .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+                .setTagLibrary(AprilTagGameDatabase.getIntoTheDeepTagLibrary())
                 .build();
 
         // set apriltag resolution decimation factor
-        SetDecimation(2);
+        SetDecimation(1);
 
         CameraPortal = new VisionPortal.Builder()
                 .setCamera(RobotContainer.ActiveOpMode.hardwareMap.get(WebcamName.class, cameraName))
@@ -61,7 +61,7 @@ public class Camera extends SubsystemBase {
 
         // set camera exposure and gain
         // values used from example code
-        setCameraExposure(1, 200);
+        setCameraExposure(3, 250);
 
         RobotContainer.DashBoard.startCameraStream(CameraPortal, 0);
     }

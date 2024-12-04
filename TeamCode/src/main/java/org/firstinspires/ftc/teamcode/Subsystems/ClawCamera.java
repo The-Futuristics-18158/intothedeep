@@ -24,13 +24,16 @@ public class ClawCamera extends SubsystemBase {
         myColorAndOrienDetProcessor.setMinBoundingBoxArea(0.05);
         CameraPortal = new VisionPortal.Builder()
                 .setCamera(RobotContainer.ActiveOpMode.hardwareMap.get(WebcamName.class, cameraName))
-                .addProcessors(myColorAndOrienDetProcessor)
+                //.addProcessors(myColorAndOrienDetProcessor)
                 .setCameraResolution(new Size(640,480))
                 .enableLiveView(false)
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .build();
-        RobotContainer.DashBoard.startCameraStream(CameraPortal, 0);
+
+        // enable camera stream to dashboard
+        EnableDBCameraSteam(false);
     }
+
     @Override
     public void periodic() {
 //        if (!dashboardInitialized) {
@@ -104,6 +107,14 @@ public class ClawCamera extends SubsystemBase {
     // use to turn on/off color and angle detect processing
     public void EnableDetectProcessing (boolean enable) {
         CameraPortal.setProcessorEnabled(myColorAndOrienDetProcessor, enable);
+    }
+
+    // enables or disables camera streaming to the dashboard
+    public void EnableDBCameraSteam (boolean enable) {
+        if (enable)
+            RobotContainer.DashBoard.startCameraStream(CameraPortal, 0);
+        else
+            RobotContainer.DashBoard.stopCameraStream();
     }
 
 }

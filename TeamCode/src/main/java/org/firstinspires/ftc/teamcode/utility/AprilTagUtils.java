@@ -21,7 +21,7 @@ public class AprilTagUtils {
     // camera positions relative to center of robot
     // (x,y) in inches!
     static Pose2d CamPositions[] = {
-            new Pose2d(4.0, 0.0, new Rotation2d(Math.toRadians(0.0))),      // camera #0
+            new Pose2d(-6.25, 0.0, new Rotation2d(Math.toRadians(180.0))),      // camera #0
     };
 
 

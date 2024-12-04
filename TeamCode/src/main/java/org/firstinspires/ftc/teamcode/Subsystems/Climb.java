@@ -33,9 +33,9 @@ public class Climb extends SubsystemBase {
     @Override
     public void periodic() {
 
-        RobotContainer.DBTelemetry.addData("highLimit",GetHighLimit());
-        RobotContainer.DBTelemetry.addData("lowLimit",GetLowLimit());
-        RobotContainer.DBTelemetry.update();
+        //RobotContainer.DBTelemetry.addData("highLimit",GetHighLimit());
+        //RobotContainer.DBTelemetry.addData("lowLimit",GetLowLimit());
+        //RobotContainer.DBTelemetry.update();
 
 
     }

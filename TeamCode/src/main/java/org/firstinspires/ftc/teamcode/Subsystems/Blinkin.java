@@ -37,8 +37,10 @@ public class Blinkin extends SubsystemBase {
     @Override
     public void periodic() {
 
-        // set blinkin for team color
-        if (RobotContainer.isRedAlliance)
+        // set blinkin colour based on robot operational state
+        if (RobotContainer.odometry.isTagDetected())
+            setPattern(BlinkinColour.APRIL_TAG_DETECTED.getPattern());
+        else if (RobotContainer.isRedAlliance)
             setPattern(BlinkinColour.RED_ALLIANCE.getPattern());
         else
             setPattern(BlinkinColour.BLUE_ALLIANCE.getPattern());

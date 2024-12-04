@@ -8,6 +8,11 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Vector2d;
 import com.arcrobotics.ftclib.trajectory.Trajectory;
 import org.firstinspires.ftc.teamcode.RobotContainer;
+import org.firstinspires.ftc.teamcode.utility.AprilTagUtils;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.opencv.core.Point;
+
+import java.util.List;
 
 
 /** Subsystem */
@@ -26,11 +31,18 @@ public class Odometry extends SubsystemBase {
     private double fieldY = 0.0;
     private double fieldAngle = 0.0;
 
+    // historical x and y position samples
+    private double[] fieldXHistory= new double[3];
+    private double[] fieldYHistory= new double[3];
+
     // variables used for displaying paths on dashboard field widget
     // arrays hold x and y points of currently shown path(s)
     // arrays are set to null if no path to be shown
     private double[] currentTrajectoryXpoints;
     private double[] currentTrajectoryYpoints;
+
+    // flag is true if apriltags are currently detected
+    private boolean isTagDetected;
 
     /** Place code here to initialize subsystem */
     public Odometry() {
@@ -80,10 +92,11 @@ public class Odometry extends SubsystemBase {
         double fieldLateralChange = ForwardChange * Math.sin(IMUHeading) + LateralChange * Math.cos(IMUHeading);
 
         fieldX += fieldForwardChange;// += means is equal to and add fieldForwardChange to itself
-
         fieldY += fieldLateralChange;// += means is equal to and add fieldLateralChange to itself
-
         fieldAngle = IMUHeading;
+
+        // process apriltag detections (if any)
+        ProcessAprilTags();
 
         RobotContainer.ActiveOpMode.telemetry.addData("fieldX",fieldX);
         RobotContainer.ActiveOpMode.telemetry.addData("fieldY",fieldY);
@@ -94,6 +107,14 @@ public class Odometry extends SubsystemBase {
 
         // save position to data store, in case op mode ends
         StoredRobotPose = new Pose2d(fieldX, fieldY, new Rotation2d(fieldAngle));
+
+        // update history of positions
+        fieldXHistory[0]=fieldXHistory[1];
+        fieldXHistory[1]=fieldXHistory[2];
+        fieldXHistory[2]=fieldX;
+        fieldYHistory[0]=fieldYHistory[1];
+        fieldYHistory[1]=fieldYHistory[2];
+        fieldYHistory[2]=fieldY;
     }
 
     // place special subsystem methods here
@@ -106,11 +127,73 @@ public class Odometry extends SubsystemBase {
         fieldY = pos.getY();
         fieldAngle = pos.getHeading();
         RobotContainer.gyro.setYawAngle(Math.toDegrees(fieldAngle));
+        fieldXHistory[0]=fieldX;fieldXHistory[1]=fieldX;fieldXHistory[2]=fieldX;
+        fieldYHistory[0]=fieldY;fieldYHistory[1]=fieldY;fieldYHistory[2]=fieldY;
     }
 
     public void resetCurrentPos(){
         setCurrentPos(new Pose2d(0,0,new Rotation2d(0)));
     }
+
+    // internal function to process apriltags and make any corrections to positions
+    private void ProcessAprilTags()
+    {
+        // assume no tags detected unless determined otherwise
+        boolean tagdetected = false;
+
+        // get list of apriltag detections from camera
+        List<AprilTagDetection> tags = RobotContainer.tagCamera.GetFreshAprilTagDetections();
+
+        // go through each detection in list
+        if (tags!=null)
+            for (int i=0; i<tags.size(); ++i)
+            {
+                if (tags.get(i)!=null) {// for maximum accuracy, check that apriltag completely fits within frame of camera
+                    Point[] corners = tags.get(i).corners;
+                    if (corners.length == 4 &&
+                            corners[0].x >= 10 && corners[0].x <= 630 &&
+                            corners[1].x >= 10 && corners[1].x <= 630 &&
+                            corners[2].x >= 10 && corners[2].x <= 630 &&
+                            corners[3].x >= 10 && corners[3].x <= 630 &&
+                            corners[0].y >= 10 && corners[0].y <= 470 &&
+                            corners[1].y >= 10 && corners[1].y <= 470 &&
+                            corners[2].y >= 10 && corners[2].y <= 470 &&
+                            corners[3].y >= 10 && corners[3].y <= 470) {
+
+                        tagdetected = true;
+
+                        // calculate robot position from apriltags (note returns in inches!)
+                        Pose2d newpos = AprilTagUtils.CalculateRobotFieldPose(tags.get(i), 0);
+
+                        // differences with recorded position
+                        double deltaX = newpos.getX()*0.0254 - fieldXHistory[1];
+                        double deltaY = newpos.getY()*0.0254 - fieldYHistory[1];
+
+                        // apply fraction of error to our current robot position
+                        // applying only small amount filters apriltag results in case of large error
+                        // larger value faster convergence but less filtering
+                        fieldX += 0.05*deltaX;
+                        fieldY += 0.05*deltaY;
+                        fieldXHistory[2] += 0.05*deltaX;
+                        fieldYHistory[2] += 0.05*deltaY;
+
+                        // make a correction to our field position based on apriltag - convert tag to m
+                        //fieldX = 0.9 * fieldX + 0.1 * newpos.getX() * 0.0254;
+                        //fieldY = 0.9 * fieldY + 0.1 * newpos.getY() * 0.0254;
+
+                    }
+                }
+            }
+
+        // record if a tag is detected
+        isTagDetected = tagdetected;
+    }
+
+    // returns true if an apriltag is currently detected.
+    public boolean isTagDetected() {
+        return isTagDetected;
+    }
+
 
 
     // Updates dashboard field widget with robot odometry info
@@ -135,7 +218,14 @@ public class Odometry extends SubsystemBase {
         // create field telemetry packet
         TelemetryPacket field = new TelemetryPacket();
         field.fieldOverlay()
-                .drawGrid(0, 0, 144, 144, 7, 7)
+                .drawGrid(0, 0, 144, 144, 7, 7);
+
+        if (RobotContainer.isRedAlliance)
+            field.fieldOverlay().setStroke("red");
+        else
+            field.fieldOverlay().setStroke("blue");
+
+        field.fieldOverlay()
                 .strokeLine(p1rotated.getX(), p1rotated.getY(), p2rotated.getX(), p2rotated.getY())
                 .strokeLine(p2rotated.getX(), p2rotated.getY(), p3rotated.getX(), p3rotated.getY())
                 .strokeLine(p3rotated.getX(), p3rotated.getY(), p1rotated.getX(), p1rotated.getY())
@@ -150,23 +240,29 @@ public class Odometry extends SubsystemBase {
         if (currentTrajectoryXpoints!=null && currentTrajectoryYpoints!=null)
             field.fieldOverlay().strokePolyline(currentTrajectoryXpoints, currentTrajectoryYpoints);
 
+        // get list of apriltag detctions from camera
+        List<AprilTagDetection> tags = RobotContainer.tagCamera.GetCurrentAprilTagDetections();
+        if (tags!=null)
+            for (int i=0; i<tags.size(); ++i)
+                if (tags.get(i)!=null) {
+                    // calculate robot position from apriltags
+                    Pose2d ATPos = AprilTagUtils.CalculateRobotFieldPose(tags.get(i),0);
+                    field.fieldOverlay().strokeCircle(ATPos.getX(), ATPos.getY(), 1.0);
+                    RobotContainer.DBTelemetry.addData("Distance", tags.get(i).ftcPose.range);
+                    RobotContainer.DBTelemetry.addData("TagX", tags.get(i).ftcPose.y);
+                    RobotContainer.DBTelemetry.addData("TagY", tags.get(i).ftcPose.x);
+            }
+
         // update field
         RobotContainer.DashBoard.sendTelemetryPacket(field);
 
-        // Show data on dashboard
-        // double value1 = 1.0;
-        // double value2 = 5.0;
+        // show robot position on dashboard
+        RobotContainer.DBTelemetry.addData("Robot x pos: ", fieldX);
+        RobotContainer.DBTelemetry.addData("Robot y pos: ", fieldY);
+        RobotContainer.DBTelemetry.addData("Robot angle: ", Math.toDegrees(fieldAngle));
+        RobotContainer.DBTelemetry.addData("Frame Rate", RobotContainer.tagCamera.GetCameraFPS());
+        RobotContainer.DBTelemetry.update();
 
-        // Method #1
-        // RobotContainer.DBTelemetry.addData("Value 1a", value1);
-        // RobotContainer.DBTelemetry.addData("Value 2a", value2);
-        // RobotContainer.DBTelemetry.update();
-
-        // Method #2
-        // TelemetryPacket data = new TelemetryPacket();
-        // data.put("Value 1b", value1);
-        // data.put("Value 2b", value2);
-        // RobotContainer.DashBoard.sendTelemetryPacket(data);
     }
 
     // display provided trajectory on the dashboard field widget

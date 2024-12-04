@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.Commands.ManualDrive;
 //import org.firstinspires.ftc.teamcode.Subsystems.Claw;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Blinkin;
+import org.firstinspires.ftc.teamcode.Subsystems.Camera;
 import org.firstinspires.ftc.teamcode.Subsystems.ClawCamera;
 import org.firstinspires.ftc.teamcode.Subsystems.Claw;
 import org.firstinspires.ftc.teamcode.Subsystems.ClawState;
@@ -40,7 +41,6 @@ import org.firstinspires.ftc.teamcode.Subsystems.Odometry;
 import org.firstinspires.ftc.teamcode.Subsystems.PivotingWrist;
 import org.firstinspires.ftc.teamcode.Subsystems.ShoulderJoint;
 import org.firstinspires.ftc.teamcode.Subsystems.SlideTargetHeight;
-//import org.firstinspires.ftc.teamcode.Subsystems.LinearSlideSubsystem;
 
 
 public class RobotContainer {
@@ -70,8 +70,8 @@ public class RobotContainer {
     public static Gyro gyro;
     public static OctQuad odometryPod;
     public static Odometry odometry;
-    //public static Camera frontCamera;
-    public static ClawCamera clawCamera;
+    public static Camera tagCamera;
+    //public static ClawCamera clawCamera;
     //public static VirtualOdometry odometry;
     public static LinearSlide linearSlide;
     //public static Camera frontCamera;
@@ -220,8 +220,8 @@ public class RobotContainer {
         drivesystem = new DriveTrain();
         //odometry = new VirtualOdometry();
         //drivesystem = new VirtualDriveTrain();
-        //frontCamera = new Camera("CamyCamy");
-        clawCamera = new ClawCamera("ClawCamera");
+        tagCamera = new Camera("TagCamera");
+        //clawCamera = new ClawCamera("ClawCamera");
         linearSlide = new LinearSlide();
         flappyFlappyWrist = new FlappyFlappyWrist();
         shoulderJoint = new ShoulderJoint();
