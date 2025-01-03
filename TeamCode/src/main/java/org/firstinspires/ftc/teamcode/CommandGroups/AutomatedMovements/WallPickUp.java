@@ -32,8 +32,8 @@ public class WallPickUp extends SequentialCommandGroup {
 
 
                 new FollowPath(
-                        1.0,
-                        0.4,
+                        2.0,
+                        0.5,
                         0.0,
                         0.0,
                         AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(135.0))),
