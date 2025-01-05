@@ -45,6 +45,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.GyroAndOdometry.Odometry;
 import org.firstinspires.ftc.teamcode.Subsystems.Arm.Wrist.PivotingWrist;
 import org.firstinspires.ftc.teamcode.Subsystems.Arm.Shoulder.ShoulderJoint;
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlide.SlideTargetHeight;
+import org.firstinspires.ftc.teamcode.utility.VisionProcessorMode;
 import org.firstinspires.ftc.teamcode.vision.ColorAndOrientationDetect;
 import org.firstinspires.ftc.teamcode.utility.AutoFunctions;
 
@@ -72,14 +73,12 @@ public class RobotContainer {
 
     // create pointers to robot subsystems
     public static DriveTrain drivesystem;
-    //public static VirtualDriveTrain drivesystem;
     public static Gyro gyro;
     public static OctQuad odometryPod;
     public static Odometry odometry;
     public static Camera clawCamera;
-    //public static VirtualOdometry odometry;
+    public static Camera tagCamera;
     public static LinearSlide linearSlide;
-    //public static Camera frontCamera;
     public static PivotingWrist wristRotateServo;
     /** * 0° is in */
     public static FlappyFlappyWrist flappyFlappyWrist;
@@ -186,8 +185,6 @@ public class RobotContainer {
         //driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new InstantCommand(()->claw.ControlClaw(ClawState.OPEN)));
 
 
-
-
 //        if (isRedAlliance){
 //            odometry.setCurrentPos(new Pose2d(0, 0, new Rotation2d(Math.toRadians(RedStartAngle))));
 //        } else {
@@ -210,7 +207,6 @@ public class RobotContainer {
         // whileHeld - runs command while button held, but will restart command if it ends
         // whenReleased - runs once when button is released
         // togglewhenPressed - turns command on and off at each button press
-
     }
 
 
@@ -255,10 +251,8 @@ public class RobotContainer {
         odometryPod = new OctQuad();
         odometry = new Odometry();
         drivesystem = new DriveTrain();
-        //odometry = new VirtualOdometry();
-        //drivesystem = new VirtualDriveTrain();
-        //frontCamera = new Camera("CamyCamy");
-        clawCamera = new Camera("ClawCamera");//"TagCamera"
+        tagCamera = new Camera("TagCamera");
+        //clawCamera = new Camera("ClawCamera");
         linearSlide = new LinearSlide();
         flappyFlappyWrist = new FlappyFlappyWrist();
         shoulderJoint = new ShoulderJoint();
@@ -271,6 +265,14 @@ public class RobotContainer {
         rightDistance = new RightDistance();
         frontDistance = new FrontDistance();
         operatingMode = new OperatingMode();
+
+        // for apriltag camera, set decimation and exposure
+        tagCamera.SetDecimation(1);
+        tagCamera.setCameraExposure(1,200);
+
+        // temporary
+        tagCamera.enableDashBoardView(true);
+        tagCamera.setVisionProcessingMode(VisionProcessorMode.APRIL_TAG_ONLY);
 
         //if (isRedAlliance){
         //    clawCamera.setVisionProcessingMode(VisionProcessorMode.RED_BLOB_ONLY);

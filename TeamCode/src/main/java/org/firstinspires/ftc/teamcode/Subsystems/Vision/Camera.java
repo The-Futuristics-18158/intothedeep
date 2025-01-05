@@ -38,6 +38,9 @@ public class Camera extends SubsystemBase {
     // current selected vision mode
     private VisionProcessorMode currentMode = VisionProcessorMode.NONE;
 
+    // camera stream enable/disabled status
+    private boolean isCameraStreamEnabled;
+
     /** Place code here to initialize subsystem */
     public Camera(String cameraName) {
 
@@ -52,7 +55,7 @@ public class Camera extends SubsystemBase {
                 //.setNumThreads(tbd)
                 .build();
 
-        // set apriltag resolution decimation factor
+        // set default apriltag resolution decimation factor
         SetDecimation(2);
 
         // Build the RED blob vision processor
@@ -134,7 +137,7 @@ public class Camera extends SubsystemBase {
         // by default disable all processors
         setVisionProcessingMode(VisionProcessorMode.NONE);
 
-        enableDashBoardView(true);
+        enableDashBoardView(false);
     }
 
     /** Method called periodically by the scheduler
@@ -146,6 +149,9 @@ public class Camera extends SubsystemBase {
 
     // use this function to set vision processing mode of the camera
     public void setVisionProcessingMode(@NonNull VisionProcessorMode newMode) {
+
+        // record if DB stream is currently enabled
+        boolean isViewEnabled = isCameraStreamEnabled;
 
         enableDashBoardView(false);
         RobotContainer.ActiveOpMode.sleep(100);
@@ -201,8 +207,10 @@ public class Camera extends SubsystemBase {
                 // don't change anything
         }
         RobotContainer.ActiveOpMode.sleep(100);
-        enableDashBoardView(true);
 
+        // if DB view was previously enabled then enable it again.
+        if (isViewEnabled)
+            enableDashBoardView(true);
     }
 
 
@@ -279,6 +287,10 @@ public class Camera extends SubsystemBase {
 
     // enables camera view in dashboard
     public void enableDashBoardView(boolean enable) {
+
+        // record status
+        isCameraStreamEnabled = enable;
+
         if (enable)
             RobotContainer.DashBoard.startCameraStream(visionPortal, 0);
         else
@@ -302,7 +314,7 @@ public class Camera extends SubsystemBase {
     }
 
     /** Set the camera gain and exposure. */
-    private void setCameraExposure(int exposureMS, int gain) {
+    public void setCameraExposure(int exposureMS, int gain) {
 
         // wait until camera in streaming mode
         while (visionPortal.getCameraState()!= VisionPortal.CameraState.STREAMING)
@@ -325,7 +337,7 @@ public class Camera extends SubsystemBase {
     }
 
     /** Sets the camera exposure to automatic */
-    private void SetAutoCameraExposure() {
+    public void SetAutoCameraExposure() {
 
         // wait until camera in streaming mode
         while (visionPortal.getCameraState()!= VisionPortal.CameraState.STREAMING)
