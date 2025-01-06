@@ -9,7 +9,7 @@ public enum BlinkinColour {
     ALLIANCE_SAMPLE(RevBlinkinLedDriver.BlinkinPattern.BEATS_PER_MINUTE_FOREST_PALETTE),
     NEUTRAL_SAMPLE(RevBlinkinLedDriver.BlinkinPattern.YELLOW),
     PIECE_GRABBED(RevBlinkinLedDriver.BlinkinPattern.LIME),
-    APRIL_TAG_DETECTED(RevBlinkinLedDriver.BlinkinPattern.STROBE_WHITE);
+    APRIL_TAG_DETECTED(RevBlinkinLedDriver.BlinkinPattern.WHITE);
 
     private final RevBlinkinLedDriver.BlinkinPattern pattern;
 

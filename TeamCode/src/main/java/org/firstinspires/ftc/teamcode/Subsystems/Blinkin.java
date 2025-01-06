@@ -43,6 +43,8 @@ public class Blinkin extends SubsystemBase {
         // set blinkin for team color
         if (RobotContainer.operatingMode.getSelectedMode() && blink)
             setPattern(BlinkinColour.NO_INFORMATION.getPattern());
+        else if (RobotContainer.odometry.isTagDetected())
+            setPattern(BlinkinColour.APRIL_TAG_DETECTED.getPattern());
         else if (RobotContainer.isRedAlliance)
             setPattern(BlinkinColour.RED_ALLIANCE.getPattern());
         else

@@ -252,7 +252,7 @@ public class RobotContainer {
         odometry = new Odometry();
         drivesystem = new DriveTrain();
         tagCamera = new Camera("TagCamera");
-        //clawCamera = new Camera("ClawCamera");
+        clawCamera = new Camera("ClawCamera");
         linearSlide = new LinearSlide();
         flappyFlappyWrist = new FlappyFlappyWrist();
         shoulderJoint = new ShoulderJoint();
@@ -268,11 +268,11 @@ public class RobotContainer {
 
         // for apriltag camera, set decimation and exposure
         tagCamera.SetDecimation(1);
-        tagCamera.setCameraExposure(1,200);
+        tagCamera.setCameraExposure(2,200);
 
         // temporary
-        tagCamera.enableDashBoardView(true);
-        tagCamera.setVisionProcessingMode(VisionProcessorMode.APRIL_TAG_ONLY);
+        //tagCamera.enableDashBoardView(true);
+        //tagCamera.setVisionProcessingMode(VisionProcessorMode.APRIL_TAG_ONLY);
 
         //if (isRedAlliance){
         //    clawCamera.setVisionProcessingMode(VisionProcessorMode.RED_BLOB_ONLY);
