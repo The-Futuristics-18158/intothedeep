@@ -21,8 +21,8 @@ public class ArmStowHigh extends SequentialCommandGroup {
 
 
                 // lifts the shoulder up 90+-60 degrees
-                // lifts the shoulder up to 135 degrees
-                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(122)),
+                // lifts the shoulder up to 122 degrees
+                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(-13)),
 
                 // folds the elbow in 270
                 new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(270)),
@@ -30,7 +30,7 @@ public class ArmStowHigh extends SequentialCommandGroup {
                 // folds the wrist in 0
                 new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(0)),
 
-                // powers the wrist and moves it to straight position
+                // moves wrist to 180
                 new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(180))
 
 
