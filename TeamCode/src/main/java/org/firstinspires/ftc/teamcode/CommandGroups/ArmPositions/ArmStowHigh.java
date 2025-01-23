@@ -25,13 +25,13 @@ public class ArmStowHigh extends SequentialCommandGroup {
                 new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(-13)),
 
                 // folds the elbow in 270
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(270)),
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(135)),
 
                 // folds the wrist in 0
-                new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(0)),
+                new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(-135)),
 
                 // moves wrist to 180
-                new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(180))
+                new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(45))
 
 
         );

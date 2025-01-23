@@ -17,17 +17,17 @@ public class BackDepositPose extends SequentialCommandGroup {
 
         addCommands (
 
-                // lifts the shoulder up 45 degrees
+                // lifts the shoulder up 52 degrees
                 new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(-83)),
 
-                // folds the elbow in 60 degrees
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(198)),
+                // folds the elbow in 198 degrees
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(63)),
 
-                // folds the wrist in 135 degrees
-                new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(180)),
+                // folds the wrist in 180 degrees
+                new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(45)),
 
-                // folds the wrist in 135 degrees
-                new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(180))
+                // folds the wrist in 180 degrees
+                new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(45))
 
 
         );

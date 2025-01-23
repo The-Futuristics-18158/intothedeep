@@ -31,10 +31,13 @@ public class ElbowJoint extends SubsystemBase {
 
 
     // Turns the Servo a set amount of degrees
-    public void RotateTo(int degrees){
+    /**
+     * Moves elbow to 135+degrees
+     * */
+    public void RotateTo(int offsetDegrees){
 
         // Converts degrees into 0-1 float
-        double servoPos = degrees/270.0;
+        double servoPos = 135+offsetDegrees/270.0;
 
         // Set the Servo to ServoPos
         ElbowServo.setPosition(servoPos);

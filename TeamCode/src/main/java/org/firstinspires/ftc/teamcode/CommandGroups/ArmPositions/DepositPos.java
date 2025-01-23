@@ -17,17 +17,17 @@ public class DepositPos extends SequentialCommandGroup {
 
         addCommands (
 
-                // lifts the shoulder up 90+-60 degrees
-                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(120)),
+                // lifts the shoulder up 120 degrees
+                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(-15)),
 
-                // folds the elbow in 10
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(200)),
+                // folds the elbow in 200
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(65)),
 
-                // folds the wrist in 10
-                new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(70)),
+                // folds the wrist in 70
+                new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(-65)),
 
-                // folds the wrist in 10
-                new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(180))
+                // folds the wrist in 180
+                new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(45))
 
 
         );
