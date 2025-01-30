@@ -19,7 +19,7 @@ public class RecalibrateOdometry extends CommandBase {
 
     // Tolerance values for position and angle
     private static final double positionTolerance = 0.2;
-    private static final double angleTolerance = 0.0;
+    private static final double angleTolerance = 0.5;
 
     // Maximum X and Y values for the Red and Blue Alliance
     private static final double redAllianceMaxX = -0.77;
@@ -77,6 +77,8 @@ public class RecalibrateOdometry extends CommandBase {
      */
     @Override
     public boolean isFinished() {
+        RobotContainer.DBTelemetry.addData("Pressed","Happy");
+        RobotContainer.DBTelemetry.update();
         return finishedUpdating;
     }
 
@@ -126,6 +128,8 @@ public class RecalibrateOdometry extends CommandBase {
             }
         }
         finishedUpdating = true;
+        RobotContainer.DBTelemetry.addData("finished updating","true");
+        RobotContainer.DBTelemetry.update();
     }
 
     /**
@@ -135,6 +139,8 @@ public class RecalibrateOdometry extends CommandBase {
      */
     private boolean facingXWall() {
         double angle = currentPos.getHeading();
+        RobotContainer.DBTelemetry.addData("Print Value",angle);
+        RobotContainer.DBTelemetry.update();
         if (isRedAlliance) {
             return Math.abs(angle - redAllianceXsubAngle) <= angleTolerance;
         } else {
