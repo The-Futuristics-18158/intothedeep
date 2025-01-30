@@ -26,6 +26,7 @@ import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.WallPickU
 import org.firstinspires.ftc.teamcode.Commands.Drive.GoToNextDropOff;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 import org.firstinspires.ftc.teamcode.Commands.Claw.ToggleClaw;
+import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToWallPickup;
 import org.firstinspires.ftc.teamcode.Commands.SelectCommandOnMode;
 import org.firstinspires.ftc.teamcode.Commands.RecalibrateOdometry;
 import org.firstinspires.ftc.teamcode.Commands.resetLift;
