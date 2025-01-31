@@ -110,7 +110,7 @@ public class WallPickUp extends SequentialCommandGroup {
 //                ),
 
 //               // Zoe: Lets play with these pauses to see if the grab response improves
-                new Pause(0.35),
+                //new Pause(0.35),
 
                 new CloseClaw(),
 

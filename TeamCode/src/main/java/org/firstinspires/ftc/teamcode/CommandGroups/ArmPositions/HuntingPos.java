@@ -37,7 +37,7 @@ public class HuntingPos extends SequentialCommandGroup {
                 new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(0)),
 
                 // powers and sets wrist to a straight position
-                new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(180))
+                new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(0))
 
         );
 
