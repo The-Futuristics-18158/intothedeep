@@ -163,18 +163,18 @@ public class RecalibrateOdometry extends CommandBase {
     }
 
     /**
-     * Checks if the robot is in the NetZone.
+     * Checks if the robot is in the SubZone.
      *
-     * @return true if the robot is in the NetZone, false otherwise.
+     * @return true if the robot is in the SubZone, false otherwise.
      */
     private boolean inSubZone() {
         boolean inTheZone = false;
-        // Check if we are in the NetZone
+        // Check if we are in the SubZone
         if (isRedAlliance) {
-            // Check if we are in the Red Alliance NetZone
+            // Check if we are in the Red Alliance SubZone
             inTheZone = Math.abs(currentPos.getX() - redAllianceMaxX) <= positionTolerance || Math.abs(currentPos.getY() - redAllianceMaxY) <= positionTolerance;
         } else {
-            // Check if we are in the Blue Alliance NetZone
+            // Check if we are in the Blue Alliance SubZone
             inTheZone = Math.abs(currentPos.getX() - blueAllianceMaxX) <= positionTolerance || Math.abs(currentPos.getY() - blueAllianceMaxY) <= positionTolerance;
         }
         return inTheZone;
