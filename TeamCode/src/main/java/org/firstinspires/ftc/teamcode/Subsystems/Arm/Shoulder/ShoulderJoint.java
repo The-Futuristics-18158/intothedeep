@@ -2,10 +2,14 @@ package org.firstinspires.ftc.teamcode.Subsystems.Arm.Shoulder;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RobotContainer;
+import org.firstinspires.ftc.teamcode.Subsystems.ClimbTargetHeight;
 
 
 /** Shoulder Subsystem
@@ -14,67 +18,60 @@ public class ShoulderJoint extends SubsystemBase {
 
     // Create the shoulder motor
     /**0° is up*/
-    private final Servo ShoulderServo;
+    private final DcMotorEx ShoulderMotor;
 
-    // used for motion profiling of servo
-    TrapezoidProfile profile;
-    ElapsedTime timer;
+    private final int PulsesPerRevolution = 1440;
+
+    private final int DegreesPerRevolution = 360;
 
 
     /** Place code here to initialize subsystem */
     public ShoulderJoint() {
 
         // Creates a Servo using the hardware map
-        ShoulderServo =  RobotContainer.ActiveOpMode.hardwareMap.get(Servo.class, "shoulderServo");
+        ShoulderMotor =  RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "shoulderMotor");
 
-        timer = new ElapsedTime();
-        timer.reset();
+        // Resets the encoders for both motors
+        ShoulderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        // Turn the left motor in reverse to move the slide upwards
+        ShoulderMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
+        // Sets the motors PIDF values
+        ShoulderMotor.setVelocityPIDFCoefficients(10.0, 0.2, 0.001, 10.0);
+
+
+        // Setting target to zero upon initialization
+        ShoulderMotor.setTargetPosition(0);
+
+        // Puts the motors into position control mode
+        ShoulderMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
     }
 
-    /** Method called periodically by the scheduler
-     * Place any code here you wish to have run periodically */
+    /**
+     * Method called periodically by the scheduler
+     * Place any code here you wish to have run periodically
+     */
     @Override
     public void periodic() {
 
-        // if we have a profile to control to, then command servo position
-        // based on time elapsed into the profile.  Otherwise do nothing.
-        if (profile!=null)
-            ShoulderServo.setPosition(profile.calculate(timer.seconds()).position);
+    }
+
+    // Using the var ticks sets the motor encoder ticks to a set position
+    public void RotateTo(int degrees) {
+
+        int ticks = (degrees-45)*PulsesPerRevolution/DegreesPerRevolution;
+        // Sets both motors to the ticks target position
+        ShoulderMotor.setTargetPosition(ticks);
+
+        // Sets the power VERY IMPORTANT
+        ShoulderMotor.setPower(0.5);
 
     }
 
-
-    // Turns the Servo a set amount of degrees
-    public void RotateTo(int degrees){
-
-        // Converts degrees into 0-1 float
-        double servoPos = degrees/270.0;
-
-        // we are about to be commanded a new profile.
-        // first determine starting state of new profile.
-        // did we previously have a profile? If so, get current state
-        // if no profile, simply get current position and assume zero speed.
-        TrapezoidProfile.State startState;
-        if (profile==null)
-            startState = new TrapezoidProfile.State(ShoulderServo.getPosition(), 0.0);
-        else
-            startState = new TrapezoidProfile.State(ShoulderServo.getPosition(),
-                    profile.calculate(timer.seconds()).velocity);
-
-        // make a new profile
-        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(1.5, 1.25),
-                new TrapezoidProfile.State(servoPos,0.0),
-                startState);
-
-        timer.reset();
-
-        // Set the Servo to ServoPos
-        //ShoulderServo.setPosition(servoPos);
-
-    }
-
-    // Sets the Elbow to fixed positions
-    public void setPos(ShoulderPosition pos) {RotateTo(pos.getValue());}
-
+   // public void moveTo(ShoulderJoint target) {moveShoulder(target.getValue());}
 
 }

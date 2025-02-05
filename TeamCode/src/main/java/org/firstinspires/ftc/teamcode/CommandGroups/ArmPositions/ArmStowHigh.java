@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+
+import org.firstinspires.ftc.teamcode.Commands.Pause;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
 // Example Sequential Command Group
@@ -21,8 +23,8 @@ public class ArmStowHigh extends SequentialCommandGroup {
 
 
                 // lifts the shoulder up 90+-60 degrees
-                // lifts the shoulder up to 135 degrees
-                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(113)),
+                // lifts the shoulder up to 113 degrees
+                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(115)),
 
                 // folds the elbow in 270
                 new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(270)),
