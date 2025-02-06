@@ -26,18 +26,12 @@ public class RecalibrateOdometry extends CommandBase {
     // how close the robot needs to be to the known angle to be considered facing the submersible
     private static final double angleTolerance = 10.0;
 
-    // The expected angle of the robot when facing the  red alliance chamber
-    private static final double redAllianceChamberAngle = RobotContainer.RedStartAngle;
-    // The expected angle of the robot when facing the red alliance ascent
-    private static final double redAllianceAscentAngle = 0.0;
-    // The expected angle of the robot when facing the blue alliance chamber
-    private static final double blueAllianceChamberAngle =  RobotContainer.BlueStartAngle;
-    // The expected angle of the robot when facing the blue alliance ascent
-    private static final double blueAllianceAscentAngle = 180.0;
-
-    // Determine if the robot is on the Red Alliance
-    private static final boolean isRedAlliance = RobotContainer.isRedAlliance();
-
+    // The expected angle of the robot when facing the red alliance chamber
+   private final double redAllianceChamberAngle;
+   private final double redAllianceAscentAngle;
+   private final double blueAllianceChamberAngle;
+   private final double blueAllianceAscentAngle;
+   private  boolean isRedAlliance;
     // Current position of the robot
     Pose2d currentPos;
 
@@ -50,6 +44,10 @@ public class RecalibrateOdometry extends CommandBase {
      */
     public RecalibrateOdometry() {
         addRequirements(RobotContainer.getOdometry());
+        redAllianceChamberAngle = RobotContainer.getRedStartAngle();
+        redAllianceAscentAngle = 0.0;
+        blueAllianceChamberAngle = RobotContainer.getBlueStartAngle();
+        blueAllianceAscentAngle = 180.0;
     }
 
     /**
@@ -58,9 +56,10 @@ public class RecalibrateOdometry extends CommandBase {
      */
     @Override
     public void initialize() {
+        isRedAlliance = RobotContainer.isRedAlliance();
         currentPos = RobotContainer.getOdometry().getCurrentPos();
         updatePosition();
-        RobotContainer.getDBTelemetry().addData("Pressed","Depressed");
+        RobotContainer.getDBTelemetry().addData("Pressed", "Depressed");
         RobotContainer.getDBTelemetry().update();
     }
 
@@ -79,7 +78,7 @@ public class RecalibrateOdometry extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        RobotContainer.getDBTelemetry().addData("Pressed","Happy");
+        RobotContainer.getDBTelemetry().addData("Pressed", "Happy");
         RobotContainer.getDBTelemetry().update();
         return finishedUpdating;
     }
@@ -101,36 +100,36 @@ public class RecalibrateOdometry extends CommandBase {
         if (inSubZone()) {
             // Facing Chamber Wall
             if (facingChamber()) {
-                RobotContainer.getDBTelemetry().addData("Facing X Wall","Yes");
+                RobotContainer.getDBTelemetry().addData("Facing Chamber", "Yes");
                 RobotContainer.getDBTelemetry().update();
                 if (isRedAlliance) {
                     RobotContainer.getDBTelemetry().addData("Y position set to ", redAllianceChamber);
                     RobotContainer.getDBTelemetry().update();
-                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(redAllianceChamber, currentPos.getY(), new Rotation2d(Math.toRadians(redAllianceChamberAngle))));
+                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(currentPos.getX(),redAllianceChamber, new Rotation2d(Math.toRadians(redAllianceChamberAngle))));
                 } else {
                     RobotContainer.getDBTelemetry().addData("Y position set to ", blueAllianceChamber);
                     RobotContainer.getDBTelemetry().update();
-                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(currentPos.getX(),blueAllianceChamber, new Rotation2d(Math.toRadians(blueAllianceChamberAngle))));
+                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(currentPos.getX(), blueAllianceChamber, new Rotation2d(Math.toRadians(blueAllianceChamberAngle))));
                 }
             }
 
             // Facing Ascent Wall
             if (facingAscent()) {
-                RobotContainer.getDBTelemetry().addData("Facing Y Wall","Yes");
+                RobotContainer.getDBTelemetry().addData("Facing Ascent", "Yes");
                 RobotContainer.getDBTelemetry().update();
                 if (isRedAlliance) {
                     RobotContainer.getDBTelemetry().addData("X position set to ", redAllianceAscent);
                     RobotContainer.getDBTelemetry().update();
-                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(currentPos.getX(), redAllianceAscent, new Rotation2d(Math.toRadians(redAllianceAscentAngle))));
+                    RobotContainer.getOdometry().setCurrentPos(new Pose2d( redAllianceAscent, currentPos.getY(), new Rotation2d(Math.toRadians(redAllianceAscentAngle))));
                 } else {
                     RobotContainer.getDBTelemetry().addData("X position set to ", blueAllianceAscent);
                     RobotContainer.getDBTelemetry().update();
-                    RobotContainer.getOdometry().setCurrentPos(new Pose2d( blueAllianceAscent,currentPos.getY(), new Rotation2d(Math.toRadians(blueAllianceAscentAngle))));
+                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(blueAllianceAscent, currentPos.getY(), new Rotation2d(Math.toRadians(blueAllianceAscentAngle))));
                 }
             }
         }
         finishedUpdating = true;
-        RobotContainer.getDBTelemetry().addData("finished updating","true");
+        RobotContainer.getDBTelemetry().addData("finished updating", "true");
         RobotContainer.getDBTelemetry().update();
     }
 
@@ -141,7 +140,7 @@ public class RecalibrateOdometry extends CommandBase {
      */
     private boolean facingChamber() {
         double angle = Math.toDegrees(currentPos.getHeading());
-        RobotContainer.getDBTelemetry().addData("Print Value",angle);
+        RobotContainer.getDBTelemetry().addData("Print Value", angle);
         RobotContainer.getDBTelemetry().update();
         if (isRedAlliance) {
             return Math.abs(angle - redAllianceChamberAngle) <= angleTolerance;
