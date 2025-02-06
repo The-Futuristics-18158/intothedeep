@@ -11,27 +11,28 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
  */
 public class RecalibrateOdometry extends CommandBase {
 
-    // Constants for the Red and Blue Alliance wall positions and angles
-    private static final double redAllianceXsub = -0.77;
-    private static final double redAllianceYsub = -0.5;
-    private static final double blueAllianceXsub = 0.5;
-    private static final double blueAllianceYsub = 0.77;
+    // known Y coordinate for the Red Alliance Chamber
+    private static final double redAllianceChamber = -0.77;
+    // known X coordinate for the Red Alliance Ascent
+    private static final double redAllianceAscent = -0.5;
+    // known Y coordinate for the Blue Alliance Chamber
+    private static final double blueAllianceChamber = 0.77;
+    // known X coordinate for the Blue Alliance Ascent
+    private static final double blueAllianceAscent = 0.5;
 
-    // Tolerance values for position and angle
-    private static final double positionTolerance = 0.2;
-    private static final double angleTolerance = 0.5;
+    // how close the robot needs to be to the known position to be considered in the subzone
+    private static final double positionTolerance = 0.25;
+    // how close the robot needs to be to the known angle to be considered facing the submersible
+    private static final double angleTolerance = 10.0;
 
-    // Maximum X and Y values for the Red and Blue Alliance
-    private static final double redAllianceMaxX = -0.77;
-    private static final double redAllianceMaxY = -0.5;
-    private static final double blueAllianceMaxX = 0.5;
-    private static final double blueAllianceMaxY = 0.77;
-
-    // Angles the robot should be facing the wall
-    private static final double redAllianceXsubAngle = RobotContainer.RedStartAngle;
-    private static final double redAllianceYsubAngle = 0.0;
-    private static final double blueAllianceXsubAngle = 180;
-    private static final double blueAllianceYsubAngle = RobotContainer.BlueStartAngle;
+    // The expected angle of the robot when facing the  red alliance chamber
+    private static final double redAllianceChamberAngle = RobotContainer.RedStartAngle;
+    // The expected angle of the robot when facing the red alliance ascent
+    private static final double redAllianceAscentAngle = 0.0;
+    // The expected angle of the robot when facing the blue alliance chamber
+    private static final double blueAllianceChamberAngle =  RobotContainer.BlueStartAngle;
+    // The expected angle of the robot when facing the blue alliance ascent
+    private static final double blueAllianceAscentAngle = 180.0;
 
     // Determine if the robot is on the Red Alliance
     private static final boolean isRedAlliance = RobotContainer.isRedAlliance();
@@ -47,7 +48,7 @@ public class RecalibrateOdometry extends CommandBase {
      * Adds the odometry subsystem as a requirement.
      */
     public RecalibrateOdometry() {
-        addRequirements(RobotContainer.odometry);
+        addRequirements(RobotContainer.getOdometry());
     }
 
     /**
@@ -56,10 +57,10 @@ public class RecalibrateOdometry extends CommandBase {
      */
     @Override
     public void initialize() {
-        currentPos = RobotContainer.odometry.getCurrentPos();
+        currentPos = RobotContainer.getOdometry().getCurrentPos();
         updatePosition();
-        RobotContainer.DBTelemetry.addData("Pressed","Depressed");
-        RobotContainer.DBTelemetry.update();
+        RobotContainer.getDBTelemetry().addData("Pressed","Depressed");
+        RobotContainer.getDBTelemetry().update();
     }
 
     /**
@@ -77,8 +78,8 @@ public class RecalibrateOdometry extends CommandBase {
      */
     @Override
     public boolean isFinished() {
-        RobotContainer.DBTelemetry.addData("Pressed","Happy");
-        RobotContainer.DBTelemetry.update();
+        RobotContainer.getDBTelemetry().addData("Pressed","Happy");
+        RobotContainer.getDBTelemetry().update();
         return finishedUpdating;
     }
 
@@ -98,38 +99,38 @@ public class RecalibrateOdometry extends CommandBase {
     private void updatePosition() {
         if (inSubZone()) {
             // Facing X Wall
-            if (facingXWall()) {
-               RobotContainer.DBTelemetry.addData("Fasing X Wall","Yes");
-               RobotContainer.DBTelemetry.update();
+            if (facingChamber()) {
+                RobotContainer.getDBTelemetry().addData("Facing X Wall","Yes");
+                RobotContainer.getDBTelemetry().update();
                 if (isRedAlliance) {
-                    RobotContainer.DBTelemetry.addData("Y position set to ", redAllianceXsub);
-                    RobotContainer.DBTelemetry.update();
-                    RobotContainer.odometry.setCurrentPos(new Pose2d(redAllianceXsub, currentPos.getY(), new Rotation2d(redAllianceXsubAngle)));
+                    RobotContainer.getDBTelemetry().addData("Y position set to ", redAllianceChamber);
+                    RobotContainer.getDBTelemetry().update();
+                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(redAllianceChamber, currentPos.getY(), new Rotation2d(redAllianceChamberAngle)));
                 } else {
-                    RobotContainer.DBTelemetry.addData("Y position set to ", blueAllianceXsub);
-                    RobotContainer.DBTelemetry.update();
-                    RobotContainer.odometry.setCurrentPos(new Pose2d(blueAllianceXsub, currentPos.getY(), new Rotation2d(blueAllianceXsubAngle)));
+                    RobotContainer.getDBTelemetry().addData("Y position set to ", blueAllianceChamber);
+                    RobotContainer.getDBTelemetry().update();
+                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(blueAllianceChamber, currentPos.getY(), new Rotation2d(blueAllianceChamberAngle)));
                 }
             }
 
             // Facing Y Wall
-            if (facingYWall()) {
-                RobotContainer.DBTelemetry.addData("Fasing Y Wall","Yes");
-                RobotContainer.DBTelemetry.update();
+            if (facingAscent()) {
+                RobotContainer.getDBTelemetry().addData("Facing Y Wall","Yes");
+                RobotContainer.getDBTelemetry().update();
                 if (isRedAlliance) {
-                    RobotContainer.DBTelemetry.addData("X position set to ", redAllianceYsub);
-                    RobotContainer.DBTelemetry.update();
-                    RobotContainer.odometry.setCurrentPos(new Pose2d(currentPos.getX(), redAllianceYsub, new Rotation2d(redAllianceYsubAngle)));
+                    RobotContainer.getDBTelemetry().addData("X position set to ", redAllianceAscent);
+                    RobotContainer.getDBTelemetry().update();
+                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(currentPos.getX(), redAllianceAscent, new Rotation2d(redAllianceAscentAngle)));
                 } else {
-                    RobotContainer.DBTelemetry.addData("X position set to ", blueAllianceYsub);
-                    RobotContainer.DBTelemetry.update();
-                    RobotContainer.odometry.setCurrentPos(new Pose2d(currentPos.getX(), blueAllianceYsub, new Rotation2d(blueAllianceYsubAngle)));
+                    RobotContainer.getDBTelemetry().addData("X position set to ", blueAllianceAscent);
+                    RobotContainer.getDBTelemetry().update();
+                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(currentPos.getX(), blueAllianceAscent, new Rotation2d(blueAllianceAscentAngle)));
                 }
             }
         }
         finishedUpdating = true;
-        RobotContainer.DBTelemetry.addData("finished updating","true");
-        RobotContainer.DBTelemetry.update();
+        RobotContainer.getDBTelemetry().addData("finished updating","true");
+        RobotContainer.getDBTelemetry().update();
     }
 
     /**
@@ -137,14 +138,14 @@ public class RecalibrateOdometry extends CommandBase {
      *
      * @return true if the robot is facing the X wall, false otherwise.
      */
-    private boolean facingXWall() {
+    private boolean facingChamber() {
         double angle = currentPos.getHeading();
-        RobotContainer.DBTelemetry.addData("Print Value",angle);
-        RobotContainer.DBTelemetry.update();
+        RobotContainer.getDBTelemetry().addData("Print Value",angle);
+        RobotContainer.getDBTelemetry().update();
         if (isRedAlliance) {
-            return Math.abs(angle - redAllianceXsubAngle) <= angleTolerance;
+            return Math.abs(angle - redAllianceChamberAngle) <= angleTolerance;
         } else {
-            return Math.abs(angle - blueAllianceXsubAngle) <= angleTolerance;
+            return Math.abs(angle - blueAllianceChamberAngle) <= angleTolerance;
         }
     }
 
@@ -153,12 +154,12 @@ public class RecalibrateOdometry extends CommandBase {
      *
      * @return true if the robot is facing the Y wall, false otherwise.
      */
-    private boolean facingYWall() {
+    private boolean facingAscent() {
         double angle = currentPos.getHeading();
         if (isRedAlliance) {
-            return Math.abs(angle - redAllianceYsubAngle) <= angleTolerance;
+            return Math.abs(angle - redAllianceAscentAngle) <= angleTolerance;
         } else {
-            return Math.abs(angle - blueAllianceYsubAngle) <= angleTolerance;
+            return Math.abs(angle - blueAllianceAscentAngle) <= angleTolerance;
         }
     }
 
@@ -172,10 +173,10 @@ public class RecalibrateOdometry extends CommandBase {
         // Check if we are in the SubZone
         if (isRedAlliance) {
             // Check if we are in the Red Alliance SubZone
-            inTheZone = Math.abs(currentPos.getX() - redAllianceMaxX) <= positionTolerance || Math.abs(currentPos.getY() - redAllianceMaxY) <= positionTolerance;
+            inTheZone = Math.abs(currentPos.getY() - redAllianceChamber) <= positionTolerance || Math.abs(currentPos.getX() - redAllianceAscent) <= positionTolerance;
         } else {
             // Check if we are in the Blue Alliance SubZone
-            inTheZone = Math.abs(currentPos.getX() - blueAllianceMaxX) <= positionTolerance || Math.abs(currentPos.getY() - blueAllianceMaxY) <= positionTolerance;
+            inTheZone = Math.abs(currentPos.getY() - blueAllianceChamber) <= positionTolerance || Math.abs(currentPos.getX() - blueAllianceAscent) <= positionTolerance;
         }
         return inTheZone;
         //return true;

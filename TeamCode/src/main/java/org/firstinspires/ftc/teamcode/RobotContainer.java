@@ -78,6 +78,7 @@ public class RobotContainer {
     public static DriveTrain drivesystem;
     public static Gyro gyro;
     public static OctQuad odometryPod;
+
     public static Odometry odometry;
     public static Camera clawCamera;
     public static LinearSlide linearSlide;
@@ -366,5 +367,37 @@ public class RobotContainer {
     public static boolean isRedAlliance() {
         return isRedAlliance;
     }
+
+    public static Odometry getOdometry() {
+        return odometry;
+    }
+
+    public static void setOdometry(Odometry odometry) {
+        RobotContainer.odometry = odometry;
+    }
+
+
+    public static Telemetry getDBTelemetry() {
+        return DBTelemetry;
+    }
+
+
+    public static double getBlueStartAngle() {
+        return BlueStartAngle;
+    }
+
+    public static double getRedStartAngle() {
+        return RedStartAngle;
+    }
+
+    public static void setRedStartAngle(double redStartAngle) {
+        RedStartAngle = redStartAngle;
+    }
+
+    public static boolean isIsRedAlliance() {
+        return isRedAlliance;
+    }
+
+
 
 }
