@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
 import org.firstinspires.ftc.teamcode.RobotContainer;
+import org.opencv.core.Mat;
 
 /**
  * Command to recalibrate the odometry of the robot.
@@ -98,14 +99,14 @@ public class RecalibrateOdometry extends CommandBase {
      */
     private void updatePosition() {
         if (inSubZone()) {
-            // Facing X Wall
+            // Facing Chamber Wall
             if (facingChamber()) {
                 RobotContainer.getDBTelemetry().addData("Facing X Wall","Yes");
                 RobotContainer.getDBTelemetry().update();
                 if (isRedAlliance) {
                     RobotContainer.getDBTelemetry().addData("Y position set to ", redAllianceChamber);
                     RobotContainer.getDBTelemetry().update();
-                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(redAllianceChamber, currentPos.getY(), new Rotation2d(redAllianceChamberAngle)));
+                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(redAllianceChamber, currentPos.getY(), new Rotation2d(Math.toRadians(redAllianceChamberAngle))));
                 } else {
                     RobotContainer.getDBTelemetry().addData("Y position set to ", blueAllianceChamber);
                     RobotContainer.getDBTelemetry().update();
@@ -113,18 +114,18 @@ public class RecalibrateOdometry extends CommandBase {
                 }
             }
 
-            // Facing Y Wall
+            // Facing Ascent Wall
             if (facingAscent()) {
                 RobotContainer.getDBTelemetry().addData("Facing Y Wall","Yes");
                 RobotContainer.getDBTelemetry().update();
                 if (isRedAlliance) {
                     RobotContainer.getDBTelemetry().addData("X position set to ", redAllianceAscent);
                     RobotContainer.getDBTelemetry().update();
-                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(currentPos.getX(), redAllianceAscent, new Rotation2d(redAllianceAscentAngle)));
+                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(currentPos.getX(), redAllianceAscent, new Rotation2d(Math.toRadians(redAllianceAscentAngle))));
                 } else {
                     RobotContainer.getDBTelemetry().addData("X position set to ", blueAllianceAscent);
                     RobotContainer.getDBTelemetry().update();
-                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(currentPos.getX(), blueAllianceAscent, new Rotation2d(blueAllianceAscentAngle)));
+                    RobotContainer.getOdometry().setCurrentPos(new Pose2d( blueAllianceAscent,currentPos.getY(), new Rotation2d(Math.toRadians(blueAllianceAscentAngle))));
                 }
             }
         }
