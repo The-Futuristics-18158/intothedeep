@@ -394,9 +394,7 @@ public class RobotContainer {
         RedStartAngle = redStartAngle;
     }
 
-    public static boolean isIsRedAlliance() {
-        return isRedAlliance;
-    }
+
 
 
 
