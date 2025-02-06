@@ -7,11 +7,8 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.RobotContainer;
-import org.firstinspires.ftc.teamcode.Subsystems.ClimbTargetHeight;
 
 
 /** Shoulder Subsystem
@@ -25,8 +22,11 @@ public class ShoulderJoint extends SubsystemBase {
     private final int DegreesPerRevolution = 360;
 
     private PIDController positionController;
-
     private double targetPosition;
+
+    // used for motion profiling of servo
+    TrapezoidProfile profile;
+    ElapsedTime timer;
 
     // absolute position sensor (analog potentiometer)
     AnalogInput posSensor;
@@ -62,6 +62,10 @@ public class ShoulderJoint extends SubsystemBase {
         // initially turn off motor
         ShoulderMotor.setPower(0.0);
 
+        // create profile timer and reset
+        timer = new ElapsedTime();
+        timer.reset();
+
     }
 
     /**
@@ -72,19 +76,19 @@ public class ShoulderJoint extends SubsystemBase {
     public void periodic() {
 
         // read should position
-        double position = getCurrentPosition();
+        double currentPosition = getCurrentPosition();
 
-        // if sensor is working, go ahead and control motor
+        // if we have a profile and sensor is working, then go ahead and control motor
         // if not, then turn off motor
         // from testing, when sensor is disconnected, it returns value of 270deg.
-
-         // NOTE: CONSIDER ADDING CODE THAT WHEN FIRST STARTED UP,
-        // ARM WILL NOT MOVE UNTIL A TARGET IS FIRST SET
-        if (position <269.9)
+        if (profile!=null && currentPosition <269.9)
         {
+            // get target position target from profile
+            targetPosition = profile.calculate(timer.seconds()).position;
+
             // calculate PID controller
             // note: from testing, the -ve is required for negative closed loop feedback!
-            double motorPower = -positionController.calculate(targetPosition - position);
+            double motorPower = -positionController.calculate(targetPosition - currentPosition);
 
             // limit motor power to +/-30%
             if (motorPower > 0.3) motorPower=0.3;
@@ -101,8 +105,8 @@ public class ShoulderJoint extends SubsystemBase {
 
 
         // temporary for control tuning purposes
-        RobotContainer.DBTelemetry.addData("Shoulder Pos (deg)", position);
-        RobotContainer.DBTelemetry.addData("Target Shoulder Pos (deg)", targetPosition);
+        RobotContainer.DBTelemetry.addData("Shoulder Pos(deg)", currentPosition);
+        RobotContainer.DBTelemetry.addData("Target Shoulder Pos(deg)", targetPosition);
         RobotContainer.DBTelemetry.update();
 
     }
@@ -116,6 +120,26 @@ public class ShoulderJoint extends SubsystemBase {
 
     // Using the var ticks sets the motor encoder ticks to a set position
     public void RotateTo(int degrees) {
+
+        // we are about to be commanded a new profile.
+        // first determine starting state of new profile.
+        // did we previously have a profile? If so, get current state
+        // if no profile, simply get current position and assume zero speed.
+        TrapezoidProfile.State startState;
+        if (profile==null)
+            startState = new TrapezoidProfile.State(getCurrentPosition(), 0.0);
+        else
+            startState = new TrapezoidProfile.State(getCurrentPosition(),
+                    profile.calculate(timer.seconds()).velocity);
+
+        // make a new profile - set max speed = 325deg/s, accel 325deg/s2
+        // torquenado 60:1 motor capable of 600deg/s no-load speed
+        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(325.0, 325.0),
+                new TrapezoidProfile.State(degrees,0.0),
+                startState);
+
+        timer.reset();
+
         // record target position
         targetPosition = degrees;
     }
