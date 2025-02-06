@@ -109,7 +109,7 @@ public class RecalibrateOdometry extends CommandBase {
                 } else {
                     RobotContainer.getDBTelemetry().addData("Y position set to ", blueAllianceChamber);
                     RobotContainer.getDBTelemetry().update();
-                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(blueAllianceChamber, currentPos.getY(), new Rotation2d(blueAllianceChamberAngle)));
+                    RobotContainer.getOdometry().setCurrentPos(new Pose2d(currentPos.getX(),blueAllianceChamber, new Rotation2d(Math.toRadians(blueAllianceChamberAngle))));
                 }
             }
 
@@ -139,7 +139,7 @@ public class RecalibrateOdometry extends CommandBase {
      * @return true if the robot is facing the X wall, false otherwise.
      */
     private boolean facingChamber() {
-        double angle = currentPos.getHeading();
+        double angle = Math.toDegrees(currentPos.getHeading());
         RobotContainer.getDBTelemetry().addData("Print Value",angle);
         RobotContainer.getDBTelemetry().update();
         if (isRedAlliance) {
@@ -155,7 +155,7 @@ public class RecalibrateOdometry extends CommandBase {
      * @return true if the robot is facing the Y wall, false otherwise.
      */
     private boolean facingAscent() {
-        double angle = currentPos.getHeading();
+        double angle = Math.toDegrees(currentPos.getHeading());
         if (isRedAlliance) {
             return Math.abs(angle - redAllianceAscentAngle) <= angleTolerance;
         } else {
