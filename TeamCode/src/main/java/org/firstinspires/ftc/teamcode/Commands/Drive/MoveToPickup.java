@@ -4,6 +4,8 @@ import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.AutoPickUpOffGround;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
 
@@ -39,8 +41,9 @@ public class MoveToPickup extends CommandBase {
     public void execute() {
         double Target_X = 280.0; // was (double) (315 + 330) / 2 before flip // 269.0
         double Target_Y = 320.0; // was (double) (325 + 315) / 2 before flip // 355.0
+
         xError = Target_X - RobotContainer.piece_center_X;
-        yError = Target_Y - RobotContainer.piece_center_Y;
+        yError = Target_Y - RobotContainer .piece_center_Y;
 
         double xSpeed = xControl.calculate(xError);
         double ySpeed = yControl.calculate(yError);
