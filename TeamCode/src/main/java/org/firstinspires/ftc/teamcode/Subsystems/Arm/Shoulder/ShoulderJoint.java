@@ -44,8 +44,9 @@ public class ShoulderJoint extends SubsystemBase {
         // note: p=0.035 and i=0.04 worked very well under no-load condition
         // p and i have been reduced for initial full arm testing as arm intertial forces can
         // act to destabilize the arm.
-        positionController = new PIDController(0.025, 0.025, 0.0);
+        positionController = new PIDController(0.020, 0.00001, 0.0); //kp=0.030; ki=0.03
         positionController.reset();
+        positionController.setTolerance(0.0);
 
         // reset target position
         targetPosition = 45.0;
@@ -91,12 +92,12 @@ public class ShoulderJoint extends SubsystemBase {
             double motorPower = -positionController.calculate(targetPosition - currentPosition);
 
             // limit motor power to +/-30%
-            if (motorPower > 0.3) motorPower=0.3;
-            if (motorPower < -0.3) motorPower=-0.3;
+            if (motorPower > 0.5) motorPower=0.5;
+            if (motorPower < -0.5) motorPower=-0.5;
 
             // drive motor
             // NOTE: COMMENT TO BE REMOVED ONCE CONTROL IS CONFIRMED
-            //ShoulderMotor.setPower(motorPower);
+            ShoulderMotor.setPower(motorPower);
         }
         else {
             positionController.reset();
@@ -122,6 +123,11 @@ public class ShoulderJoint extends SubsystemBase {
 
     /** Using the var ticks sets the motor encoder ticks to a set position*/
     public void RotateTo(int degrees) {
+        double currpos = getCurrentPosition();
+        if( degrees < currpos) // 135->45 up
+            positionController.setPID(0.030, 0.00001, 0.0);
+        else // down
+            positionController.setPID(0.018, 0.00001, 0.0);
 
         // we are about to be commanded a new profile.
         // first determine starting state of new profile.

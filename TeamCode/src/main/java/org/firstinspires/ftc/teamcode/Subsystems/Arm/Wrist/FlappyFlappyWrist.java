@@ -57,7 +57,7 @@ public class FlappyFlappyWrist extends SubsystemBase {
                     profile.calculate(timer.seconds()).velocity);
 
         // make a new profile
-        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(1.5, 1.25),
+        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(2.0, 1.75),
                 new TrapezoidProfile.State(servoPos,0.0),
                 startState);
 
