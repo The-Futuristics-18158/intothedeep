@@ -24,11 +24,11 @@ public class ShoulderJoint extends SubsystemBase {
     private PIDController positionController;
     private double targetPosition;
 
-    // used for motion profiling of servo
+    /** used for motion profiling of servo*/
     TrapezoidProfile profile;
     ElapsedTime timer;
 
-    // absolute position sensor (analog potentiometer)
+    /** absolute position sensor (analog potentiometer)*/
     AnalogInput posSensor;
 
     /** Place code here to initialize subsystem */
@@ -111,14 +111,16 @@ public class ShoulderJoint extends SubsystemBase {
 
     }
 
-    // returns current position of shoulder (in deg)
+    /** returns current position of shoulder (in deg)*/
     public double getCurrentPosition() {
         // note: posSensor.getMaxVoltage() returns a constant of 3.3V
-        return 270 * (1.0 - (posSensor.getVoltage() / posSensor.getMaxVoltage()));
+        // (posSensor.getVoltage())
+        //(157 * (1.0 - (posSensor.getVoltage() / posSensor.getMaxVoltage())))-5.0;
+        return (242 * (1.0 - (posSensor.getVoltage() / posSensor.getMaxVoltage())));
     }
 
 
-    // Using the var ticks sets the motor encoder ticks to a set position
+    /** Using the var ticks sets the motor encoder ticks to a set position*/
     public void RotateTo(int degrees) {
 
         // we are about to be commanded a new profile.
