@@ -15,11 +15,11 @@ public class RecalibrateOdometry extends CommandBase {
     // known Y coordinate for the Red Alliance Chamber
     private static final double redAllianceChamber = -0.77;
     // known X coordinate for the Red Alliance Ascent
-    private static final double redAllianceAscent = -0.5;
+    private static final double redAllianceAscent = -0.56;
     // known Y coordinate for the Blue Alliance Chamber
     private static final double blueAllianceChamber = 0.77;
     // known X coordinate for the Blue Alliance Ascent
-    private static final double blueAllianceAscent = 0.5;
+    private static final double blueAllianceAscent = 0.56;
 
     // how close the robot needs to be to the known position to be considered in the subzone
     private static final double positionTolerance = 0.25;
