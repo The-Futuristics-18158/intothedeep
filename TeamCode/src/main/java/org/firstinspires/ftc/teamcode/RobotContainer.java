@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
@@ -16,31 +17,27 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.ArmStowHigh;
 import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.BackDepositPose;
-import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.DropToGrab;
-import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.HuntingPos;
 import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.AutoPickUpOffGround;
 import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.FullClimb;
 import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.HighBucketDeposit;
 import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.PickupFromSubmersible;
 import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.PlaceSpecimenAddOffset;
 import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.WallPickUp;
-import org.firstinspires.ftc.teamcode.Commands.Claw.OpenClaw;
 import org.firstinspires.ftc.teamcode.Commands.Drive.GoToNextDropOff;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 import org.firstinspires.ftc.teamcode.Commands.Claw.ToggleClaw;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToWallPickup;
 import org.firstinspires.ftc.teamcode.Commands.SelectCommandOnMode;
-import org.firstinspires.ftc.teamcode.Commands.TemplateCommand;
+import org.firstinspires.ftc.teamcode.Commands.RecalibrateOdometry;
 import org.firstinspires.ftc.teamcode.Commands.resetLift;
 import org.firstinspires.ftc.teamcode.Subsystems.Blinkin;
+import org.firstinspires.ftc.teamcode.Subsystems.FrontTouch;
 import org.firstinspires.ftc.teamcode.Subsystems.OperatingMode;
-import org.firstinspires.ftc.teamcode.Subsystems.FrontDistance;
 import org.firstinspires.ftc.teamcode.Subsystems.RightDistance;
 import org.firstinspires.ftc.teamcode.Subsystems.Vision.Camera;
 import org.firstinspires.ftc.teamcode.Subsystems.Arm.Claw.Claw;
 import org.firstinspires.ftc.teamcode.Subsystems.Arm.Claw.ClawTouchSensor;
 import org.firstinspires.ftc.teamcode.Subsystems.Climb;
-import org.firstinspires.ftc.teamcode.Subsystems.ClimbTargetHeight;
 import org.firstinspires.ftc.teamcode.Subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Arm.Elbow.ElbowJoint;
 import org.firstinspires.ftc.teamcode.Subsystems.Arm.Wrist.FlappyFlappyWrist;
@@ -51,7 +48,6 @@ import org.firstinspires.ftc.teamcode.Subsystems.GyroAndOdometry.Odometry;
 import org.firstinspires.ftc.teamcode.Subsystems.Arm.Wrist.PivotingWrist;
 import org.firstinspires.ftc.teamcode.Subsystems.Arm.Shoulder.ShoulderJoint;
 import org.firstinspires.ftc.teamcode.Subsystems.LinearSlide.SlideTargetHeight;
-import org.firstinspires.ftc.teamcode.vision.ColorAndOrientationDetect;
 import org.firstinspires.ftc.teamcode.utility.AutoFunctions;
 
 import java.util.List;
@@ -82,6 +78,7 @@ public class RobotContainer {
     public static DriveTrain drivesystem;
     public static Gyro gyro;
     public static OctQuad odometryPod;
+
     public static Odometry odometry;
     public static Camera clawCamera;
     public static LinearSlide linearSlide;
@@ -98,7 +95,8 @@ public class RobotContainer {
     public static ClawTouchSensor clawTouch;
     public static Blinkin blinkin;
     public static RightDistance rightDistance;
-    //public static FrontDistance frontDistance;
+    public static FrontTouch frontTouch;
+    public static Trigger frontTouchTrigger; // Trigger to trigger recalcing of the odometry based on the frontTouch sensor being pressed.
     public static OperatingMode operatingMode;
 
     //Angle of the robot at the start of auto
@@ -197,6 +195,9 @@ public class RobotContainer {
         //driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new InstantCommand(()->claw.ControlClaw(ClawState.OPEN)));
 
 
+        // Bind a command to the front Touch Trigger
+        frontTouchTrigger.whenActive(new RecalibrateOdometry());
+
 
 
 //        if (isRedAlliance){
@@ -236,6 +237,9 @@ public class RobotContainer {
         Init(mode);
 
         // perform any autonomous-specific initialization here
+        // Bind a command to the front Touch Trigger
+        frontTouchTrigger.whenActive(new RecalibrateOdometry());
+
     }
 
     // robot initialization - common to both auto and teleop
@@ -286,8 +290,13 @@ public class RobotContainer {
         clawTouch = new ClawTouchSensor();
         blinkin = new Blinkin();
         rightDistance = new RightDistance();
+        frontTouch = new FrontTouch();
         //frontDistance = new FrontDistance();
         operatingMode = new OperatingMode();
+
+
+        /* set a new Trigger to trigger recalcing of the odometry based on the frontTouch sensor being pressed.*/
+        frontTouchTrigger = new Trigger(() -> RobotContainer.frontTouch.hasTouched());
 
         //if (isRedAlliance){
         //    clawCamera.setVisionProcessingMode(VisionProcessorMode.RED_BLOB_ONLY);
@@ -358,5 +367,35 @@ public class RobotContainer {
     public static boolean isRedAlliance() {
         return isRedAlliance;
     }
+
+    public static Odometry getOdometry() {
+        return odometry;
+    }
+
+    public static void setOdometry(Odometry odometry) {
+        RobotContainer.odometry = odometry;
+    }
+
+
+    public static Telemetry getDBTelemetry() {
+        return DBTelemetry;
+    }
+
+
+    public static double getBlueStartAngle() {
+        return BlueStartAngle;
+    }
+
+    public static double getRedStartAngle() {
+        return RedStartAngle;
+    }
+
+    public static void setRedStartAngle(double redStartAngle) {
+        RedStartAngle = redStartAngle;
+    }
+
+
+
+
 
 }
