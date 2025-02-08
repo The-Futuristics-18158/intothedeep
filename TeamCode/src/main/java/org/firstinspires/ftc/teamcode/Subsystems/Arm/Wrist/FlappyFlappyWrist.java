@@ -51,7 +51,7 @@ public class FlappyFlappyWrist extends SubsystemBase {
         // if no profile, simply get current position and assume zero speed.
         TrapezoidProfile.State startState;
         if (profile==null)
-            startState = new TrapezoidProfile.State(wristServo.getPosition(), 0.0);
+            startState = new TrapezoidProfile.State(servoPos, 0.0);
         else
             startState = new TrapezoidProfile.State(wristServo.getPosition(),
                     profile.calculate(timer.seconds()).velocity);
