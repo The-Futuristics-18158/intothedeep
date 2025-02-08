@@ -53,7 +53,7 @@ public class ElbowJoint extends SubsystemBase {
         // if no profile, simply get current position and assume zero speed.
         TrapezoidProfile.State startState;
         if (profile==null)
-            startState = new TrapezoidProfile.State(ElbowServo.getPosition(), 0.0);
+            startState = new TrapezoidProfile.State(servoPos, 0.0);
         else
             startState = new TrapezoidProfile.State(ElbowServo.getPosition(),
                     profile.calculate(timer.seconds()).velocity);
