@@ -56,7 +56,7 @@ public class WallPickUp extends SequentialCommandGroup {
                 new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(270)),
 
                 // folds the wrist in 0
-                new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(93)),
+                new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(85)),
 
                 // powers the wrist and moves it to straight position
                 new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(0)),

@@ -123,6 +123,10 @@ public class RobotContainer {
         // set claw default command
         claw.setDefaultCommand(new ToggleClaw());
 
+        // reset shoulder encoder to match potentiometer
+        shoulderJoint.ResetMotorPosition();
+
+
         // bind commands to buttons
         // bind gyro reset to back button.
         // Note: since reset is very simple command, we can just use 'InstandCommand'
@@ -311,6 +315,7 @@ public class RobotContainer {
     public static double[] piece_center;
     public static double piece_center_X;
     public static double piece_center_Y;
+    public static boolean piece_detected;
 
     // call this function periodically to operate scheduler
     public static void Periodic() {
@@ -327,14 +332,16 @@ public class RobotContainer {
             }
             piece_center_X = clawCamera.GetBlobDetections().get(0).getBoxFit().center.x;
             piece_center_Y = clawCamera.GetBlobDetections().get(0).getBoxFit().center.y;
+            piece_detected = true;
 
         } catch (Exception e) {
+            piece_detected = false;
         }
 
-//        DBTelemetry.addData("Angle", piece_angle);
-//        DBTelemetry.addData("Center X", piece_center_X);
-//        DBTelemetry.addData("Center Y", piece_center_Y);
-//        DBTelemetry.update();
+        //DBTelemetry.addData("Angle", piece_angle);
+        //DBTelemetry.addData("Center X", piece_center_X);
+        //DBTelemetry.addData("Center Y", piece_center_Y);
+        //DBTelemetry.update();
 
         // actual interval time
         double intervaltime = timer.milliseconds();
