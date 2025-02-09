@@ -31,6 +31,9 @@ public class ShoulderJoint extends SubsystemBase {
     /** absolute position sensor (analog potentiometer)*/
     AnalogInput posSensor;
 
+    double EncoderOffset;
+
+
     /** Place code here to initialize subsystem */
     public ShoulderJoint() {
 
@@ -47,6 +50,7 @@ public class ShoulderJoint extends SubsystemBase {
         positionController = new PIDController(0.020, 0.00001, 0.0); //kp=0.030; ki=0.03
         positionController.reset();
         positionController.setTolerance(0.0);
+        positionController.setIntegrationBounds(-20.0, 20.0);
 
         // reset target position
         targetPosition = 45.0;
@@ -67,6 +71,7 @@ public class ShoulderJoint extends SubsystemBase {
         timer = new ElapsedTime();
         timer.reset();
 
+        ResetMotorPosition();
     }
 
     /**
@@ -77,23 +82,24 @@ public class ShoulderJoint extends SubsystemBase {
     public void periodic() {
 
         // read should position
-        double currentPosition = getCurrentPosition();
+        double currentPosition = getEncoderPosition();
 
         // if we have a profile and sensor is working, then go ahead and control motor
         // if not, then turn off motor
         // from testing, when sensor is disconnected, it returns value of 270deg.
-        if (profile!=null && currentPosition <269.9)
+        double motorPower=0.0;
+        if (profile!=null) //&& currentPosition <269.9)
         {
             // get target position target from profile
             targetPosition = profile.calculate(timer.seconds()).position;
 
             // calculate PID controller
             // note: from testing, the -ve is required for negative closed loop feedback!
-            double motorPower = -positionController.calculate(targetPosition - currentPosition);
+            motorPower = -positionController.calculate(targetPosition - currentPosition);
 
-            // limit motor power to +/-30%
-            if (motorPower > 0.5) motorPower=0.5;
-            if (motorPower < -0.5) motorPower=-0.5;
+            // limit motor power to +/-75%
+            if (motorPower > 1.00) motorPower=1.00;
+            if (motorPower < -1.00) motorPower=-1.00;
 
             // drive motor
             // NOTE: COMMENT TO BE REMOVED ONCE CONTROL IS CONFIRMED
@@ -106,28 +112,59 @@ public class ShoulderJoint extends SubsystemBase {
 
 
         // temporary for control tuning purposes
-        RobotContainer.DBTelemetry.addData("Shoulder Pos(deg)", currentPosition);
+        RobotContainer.DBTelemetry.addData("MotorPower", motorPower*100.0);
+        RobotContainer.DBTelemetry.addData("Shoulder Enc(deg)", getEncoderPosition());
+        RobotContainer.DBTelemetry.addData("Shoulder Anlg(deg)", getAnalogPosition());
         RobotContainer.DBTelemetry.addData("Target Shoulder Pos(deg)", targetPosition);
         RobotContainer.DBTelemetry.update();
 
     }
 
     /** returns current position of shoulder (in deg)*/
-    public double getCurrentPosition() {
+    public double getAnalogPosition() {
         // note: posSensor.getMaxVoltage() returns a constant of 3.3V
         // (posSensor.getVoltage())
         //(157 * (1.0 - (posSensor.getVoltage() / posSensor.getMaxVoltage())))-5.0;
         return (242 * (1.0 - (posSensor.getVoltage() / posSensor.getMaxVoltage())));
     }
 
+    // in deg
+    public double getEncoderPosition() {
+        return 0.25*ShoulderMotor.getCurrentPosition()+EncoderOffset;
+    }
+
+    // in deg
+    public void setEncoderPosition(double deg) {
+        EncoderOffset = deg-0.25*ShoulderMotor.getCurrentPosition();
+    }
+
+
+    public void ResetMotorPosition()
+    {
+        // set motor encoder position
+        double deg = getAnalogPosition();
+        setEncoderPosition(deg);
+    }
 
     /** Using the var ticks sets the motor encoder ticks to a set position*/
-    public void RotateTo(int degrees) {
-        double currpos = getCurrentPosition();
+    public void RotateTo(double degrees) {
+        double currpos = getEncoderPosition();
+
+        TrapezoidProfile.Constraints constraint;
+
+        // from testing, revise profile constraints depending if raising or lowering shoulder
+        // raising shoulder (reducing degrees) seems to result in more overshoot requiring lower amax.
         if( degrees < currpos) // 135->45 up
-            positionController.setPID(0.030, 0.00001, 0.0);
+        {
+            constraint = new TrapezoidProfile.Constraints(500.0, 150.0);
+            positionController.setPID(0.025, 0.18, 0.002); // was 0.020 i=0.1
+        }
         else // down
-            positionController.setPID(0.018, 0.00001, 0.0);
+        {
+            constraint = new TrapezoidProfile.Constraints(500.0, 300.0);
+            positionController.setPID(0.025, 0.18, 0.002); // was 0.02 i=0.07
+        }
+
 
         // we are about to be commanded a new profile.
         // first determine starting state of new profile.
@@ -135,18 +172,20 @@ public class ShoulderJoint extends SubsystemBase {
         // if no profile, simply get current position and assume zero speed.
         TrapezoidProfile.State startState;
         if (profile==null)
-            startState = new TrapezoidProfile.State(getCurrentPosition(), 0.0);
+            startState = new TrapezoidProfile.State(getEncoderPosition(), 0.0);
         else
-            startState = new TrapezoidProfile.State(getCurrentPosition(),
+            startState = new TrapezoidProfile.State(getEncoderPosition(),
                     profile.calculate(timer.seconds()).velocity);
 
         // make a new profile - set max speed = 325deg/s, accel 325deg/s2
         // torquenado 60:1 motor capable of 600deg/s no-load speed
-        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(325.0, 325.0),
-                new TrapezoidProfile.State(degrees,0.0),
-                startState);
+        profile = new TrapezoidProfile(constraint, new TrapezoidProfile.State(degrees,0.0), startState);
 
         timer.reset();
+
+        // reset PIDs
+        positionController.reset();
+
 
         // record target position
         targetPosition = degrees;

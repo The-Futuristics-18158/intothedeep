@@ -40,15 +40,19 @@ public class MoveToPickup extends CommandBase {
     @Override
     public void execute() {
         double Target_X = 280.0; // was (double) (315 + 330) / 2 before flip // 269.0
-        double Target_Y = 320.0; // was (double) (325 + 315) / 2 before flip // 355.0
+        double Target_Y = 280.0; // was (double) (325 + 315) / 2 before flip // 355.0  / was 320
 
-        xError = Target_X - RobotContainer.piece_center_X;
-        yError = Target_Y - RobotContainer .piece_center_Y;
+        // if piece is detected the move robot towards piece
+        // otherwise, keep moving as per before
+        if (RobotContainer.piece_detected) {
+            xError = Target_X - RobotContainer.piece_center_X;
+            yError = Target_Y - RobotContainer.piece_center_Y;
 
-        double xSpeed = xControl.calculate(xError);
-        double ySpeed = yControl.calculate(yError);
+            double xSpeed = xControl.calculate(xError);
+            double ySpeed = yControl.calculate(yError);
 
-        RobotContainer.drivesystem.RobotDrive(ySpeed, xSpeed, 0);
+            RobotContainer.drivesystem.RobotDrive(ySpeed, xSpeed, 0);
+        }
 
         if (xError>20 || yError>20) {
             timer.reset();
@@ -64,7 +68,7 @@ public class MoveToPickup extends CommandBase {
     // This method to return true only when command is to finish. Otherwise return false
     @Override
     public boolean isFinished() {
-        if (timer.seconds()>1.5) {
+        if (timer.seconds()>1.0) {
             RobotContainer.blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE);
             return true;
         }else {

@@ -71,15 +71,15 @@ public class Camera extends SubsystemBase {
                 .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
                 //.setContourMode(ColorBlobLocatorProcessor.ContourMode.ALL_FLATTENED_HIERARCHY)
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-1.0, 1.0, 1.0, -1.0))
-                .setBlurSize(2)
+                .setBlurSize(5)
                 .setErodeSize(3)
-                .setDilateSize(1)
+                .setDilateSize(2)
                 .setDrawContours(true)
                 .build();
         redBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
                 ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, 6000, 40000));
-        redBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
-                ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, 1.0, 2.0));
+        //redBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
+        //        ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, 1.0, 2.0));
         redBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
                 ColorBlobLocatorProcessor.BlobCriteria.BY_DENSITY, 0.8, 1.0));
         redBlobProcessor.setSort(new ColorBlobLocatorProcessor.BlobSort(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, SortOrder.DESCENDING));
@@ -93,15 +93,15 @@ public class Camera extends SubsystemBase {
                 .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
                 //.setContourMode(ColorBlobLocatorProcessor.ContourMode.ALL_FLATTENED_HIERARCHY)
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-1.0, 1.0, 1.0, -1.0))
-                .setBlurSize(2)
+                .setBlurSize(5)
                 .setErodeSize(3)
                 .setDilateSize(2)
                 .setDrawContours(true)
                 .build();
         blueBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
                 ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, 6000, 40000));
-        blueBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
-                ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, 1.0, 2.0));
+        //blueBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
+        //        ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, 1.0, 2.0));
         blueBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
                 ColorBlobLocatorProcessor.BlobCriteria.BY_DENSITY, 0.8, 1.0));
         blueBlobProcessor.setSort(new ColorBlobLocatorProcessor.BlobSort(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, SortOrder.DESCENDING));
@@ -115,15 +115,15 @@ public class Camera extends SubsystemBase {
                 .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
                 //.setContourMode(ColorBlobLocatorProcessor.ContourMode.ALL_FLATTENED_HIERARCHY)
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-1.0, 1.0, 1.0, -1.0))
-                .setBlurSize(2)
+                .setBlurSize(5)
                 .setErodeSize(3)
-                .setDilateSize(1)
+                .setDilateSize(2)
                 .setDrawContours(true)
                 .build();
         yellowBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
                 ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, 6000, 40000));
-        yellowBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
-                ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, 1.0, 2.0));
+        //yellowBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
+        //        ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, 1.0, 2.0));
         yellowBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
                 ColorBlobLocatorProcessor.BlobCriteria.BY_DENSITY, 0.8, 1.0));
         yellowBlobProcessor.setSort(new ColorBlobLocatorProcessor.BlobSort(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, SortOrder.DESCENDING));
@@ -139,7 +139,7 @@ public class Camera extends SubsystemBase {
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-1.0, 1.0, 1.0, -1.0))
                 .setBlurSize(2)
                 .setErodeSize(3)
-                .setDilateSize(1)
+                .setDilateSize(2)
                 .setDrawContours(true)
                 .build();
         redWallBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
@@ -158,14 +158,14 @@ public class Camera extends SubsystemBase {
                 //                    new Scalar(181.3, 182.8, 255.0)))
                 .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)
                 //.setContourMode(ColorBlobLocatorProcessor.ContourMode.ALL_FLATTENED_HIERARCHY)
-                .setRoi(ImageRegion.asUnityCenterCoordinates(-1.0, 1.0, 1.0, 0.0))
+                .setRoi(ImageRegion.asUnityCenterCoordinates(-1.0, 0.8, 1.0, -0.30))
                 .setBlurSize(2)
                 .setErodeSize(3)
                 .setDilateSize(2)
                 .setDrawContours(true)
                 .build();
         blueWallBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
-                ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, 2000, 40000));
+                ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, 2000, 60000));
         //blueWallBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
         //        ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO, 1.0, 2.0));
         blueWallBlobProcessor.addFilter(new ColorBlobLocatorProcessor.BlobFilter(
