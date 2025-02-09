@@ -68,7 +68,7 @@ public class MoveToPickup extends CommandBase {
     // This method to return true only when command is to finish. Otherwise return false
     @Override
     public boolean isFinished() {
-        if (timer.seconds()>0.5) {
+        if (timer.seconds()>1.0) {
             RobotContainer.blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE);
             return true;
         }else {
