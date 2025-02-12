@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -26,14 +24,12 @@ import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.WallPickU
 import org.firstinspires.ftc.teamcode.Commands.Drive.GoToNextDropOff;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 import org.firstinspires.ftc.teamcode.Commands.Claw.ToggleClaw;
-import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToWallPickup;
 import org.firstinspires.ftc.teamcode.Commands.SelectCommandOnMode;
 import org.firstinspires.ftc.teamcode.Commands.RecalibrateOdometry;
 import org.firstinspires.ftc.teamcode.Commands.resetLift;
 import org.firstinspires.ftc.teamcode.Subsystems.Blinkin;
 import org.firstinspires.ftc.teamcode.Subsystems.FrontTouch;
 import org.firstinspires.ftc.teamcode.Subsystems.OperatingMode;
-import org.firstinspires.ftc.teamcode.Subsystems.RightDistance;
 import org.firstinspires.ftc.teamcode.Subsystems.Vision.Camera;
 import org.firstinspires.ftc.teamcode.Subsystems.Arm.Claw.Claw;
 import org.firstinspires.ftc.teamcode.Subsystems.Arm.Claw.ClawTouchSensor;
@@ -94,7 +90,6 @@ public class RobotContainer {
     public static Climb climb;
     public static ClawTouchSensor clawTouch;
     public static Blinkin blinkin;
-    public static RightDistance rightDistance;
     public static FrontTouch frontTouch;
     public static Trigger frontTouchTrigger; // Trigger to trigger recalcing of the odometry based on the frontTouch sensor being pressed.
     public static OperatingMode operatingMode;
@@ -293,7 +288,6 @@ public class RobotContainer {
         climb = new Climb();
         clawTouch = new ClawTouchSensor();
         blinkin = new Blinkin();
-        rightDistance = new RightDistance();
         frontTouch = new FrontTouch();
         //frontDistance = new FrontDistance();
         operatingMode = new OperatingMode();
