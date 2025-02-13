@@ -15,12 +15,6 @@ import org.firstinspires.ftc.teamcode.utility.AutoFunctions;
 
 import java.util.ArrayList;
 
-// Example Sequential Command Group
-// There are also:
-// ParallelCommandGroup
-// ParallelRaceGroup
-// ParallelDeadlineGroup
-
 public class WallPickUp extends SequentialCommandGroup {
 
     // constructor
@@ -35,8 +29,6 @@ public class WallPickUp extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue(new Pose2d(-1.2, 1.2, new Rotation2d(Math.toRadians(-90.0))))
                 ),
 
-                // lifts the shoulder up 90+-60 degrees
-                // lifts the shoulder up to 135 degrees
                 new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(54)),
 
                 // folds the elbow in 270
@@ -63,8 +55,6 @@ public class WallPickUp extends SequentialCommandGroup {
                 new ArmStowHigh(),
 
                 new Pause(0.25)
-
-
         );
     }
 
