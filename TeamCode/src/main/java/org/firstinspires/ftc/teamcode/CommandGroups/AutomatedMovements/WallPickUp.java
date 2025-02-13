@@ -15,12 +15,6 @@ import org.firstinspires.ftc.teamcode.utility.AutoFunctions;
 
 import java.util.ArrayList;
 
-// Example Sequential Command Group
-// There are also:
-// ParallelCommandGroup
-// ParallelRaceGroup
-// ParallelDeadlineGroup
-
 public class WallPickUp extends SequentialCommandGroup {
 
     // constructor
@@ -29,28 +23,13 @@ public class WallPickUp extends SequentialCommandGroup {
         addCommands (
         // What this position should do is give the camera a good vantage point as well as keep the arm out of the way
 
-                // Spline created w. start angle of 90 will ensure that the robot pulls away from submersible on wall
-                // cycling from last drop accounting for submersible legs / structure inset
-//                new FollowPath(
-//                        1.0,
-//                        0.4,
-//                        0.0,
-//                        0.0,
-//                        AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(135.0))),
-//                        new ArrayList<Translation2d>() {{ }},//1.0y
-//                        AutoFunctions.redVsBlue(new Pose2d(-1.2, 1.2, new Rotation2d(Math.toRadians(90.0)))),
-//                        AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(-90.0)))),
-
-
                 new MoveToPose(
                         1.0,
                         0.5,
                         AutoFunctions.redVsBlue(new Pose2d(-1.2, 1.2, new Rotation2d(Math.toRadians(-90.0))))
                 ),
 
-                // lifts the shoulder up 90+-60 degrees
-                // lifts the shoulder up to 135 degrees
-                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(50)),
+                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(54)),
 
                 // folds the elbow in 270
                 new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(270)),
@@ -67,36 +46,7 @@ public class WallPickUp extends SequentialCommandGroup {
 
                 new Pause(0.25),
 
-//                new FollowPath(
-//                        0.3,
-//                        1.0,
-//                        0.0,
-//                        0.0,
-//                        AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(90.0))),
-//                        new ArrayList<Translation2d>() {{ }},
-//                        AutoFunctions.redVsBlue(new Pose2d(-1.2, 1.45, new Rotation2d(Math.toRadians(90.0)))),
-//                        AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(-90.0)))),
-
-                // perform a guided approach in to pick up specimen from wall
-                // new function Jan26/2025 - replaced previous unguided MoveToPose
                 new MoveToWallPickup(),
-
-                //new MoveToPose(
-                //        0.3,
-                //        1.0,
-                //        AutoFunctions.redVsBlue(new Pose2d(-1.2, 1.45, new Rotation2d(Math.toRadians(-90.0))))
-                //),
-
-//                // Zoe: This could likely be a good case for a simple MoveToPose()
-//                // This might allow Lonan to have an easier time to predict the robot's approach on pickup.
-//                new MoveToPose(
-//                        0.3,
-//                        1.0,
-//                        AutoFunctions.redVsBlue(new Pose2d(-1.2, 1.45, new Rotation2d(Math.toRadians(-90.0))))
-//                ),
-
-//               // Zoe: Lets play with these pauses to see if the grab response improves
-                //new Pause(0.35),
 
                 new CloseClaw(),
 
@@ -105,8 +55,6 @@ public class WallPickUp extends SequentialCommandGroup {
                 new ArmStowHigh(),
 
                 new Pause(0.25)
-
-
         );
     }
 
