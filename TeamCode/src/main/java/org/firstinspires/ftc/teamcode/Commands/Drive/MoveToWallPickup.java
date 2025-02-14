@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Commands.Drive;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.controller.PIDController;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.utility.VisionProcessorMode;
@@ -15,6 +16,8 @@ public class MoveToWallPickup extends CommandBase {
     PIDController xControl;
     PIDController omegaControl;
 
+    Boolean correction_occured;
+
     // constructor
     public MoveToWallPickup() {
 
@@ -28,6 +31,8 @@ public class MoveToWallPickup extends CommandBase {
     // This method is called once when command is started
     @Override
     public void initialize() {
+
+        correction_occured = false;
 
         // initialize y controller
         xControl.reset();
@@ -56,7 +61,16 @@ public class MoveToWallPickup extends CommandBase {
         if (detections!=null && !detections.isEmpty())
         {
             double piece_center_X = detections.get(0).getBoxFit().center.x;
-
+            double piece_center_Y = detections.get(0).getBoxFit().center.y;
+            RobotContainer.DBTelemetry.addData("corrected sholder", correction_occured);
+            if (!correction_occured) {
+                if (piece_center_Y > 160){
+                    new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(40));
+                } else if (piece_center_Y < 150) {
+                    new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(60));
+                }
+                correction_occured = true;
+            }
             // determine sideways speed
             x_speed = xControl.calculate(320.0 - piece_center_X);
         }
@@ -66,7 +80,8 @@ public class MoveToWallPickup extends CommandBase {
 
 
         // determine forward speed (m/s)
-        y_speed = 0.20;
+
+        y_speed = 0.1;//0.18
 
         // if on red alliance, field directions are opposite
         if (RobotContainer.isRedAlliance())

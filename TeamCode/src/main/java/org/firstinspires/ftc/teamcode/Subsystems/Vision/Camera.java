@@ -192,6 +192,7 @@ public class Camera extends SubsystemBase {
      * Place any code here you wish to have run periodically */
     @Override
     public void periodic() {
+
     }
 
     // use this function to set vision processing mode of the camera
@@ -388,6 +389,10 @@ public class Camera extends SubsystemBase {
         //ColorBlobLocatorProcessor.Util.sortByDensity(SortOrder.DESCENDING, blobs);
         //ColorBlobLocatorProcessor.Util.sortByAspectRatio(SortOrder.DESCENDING, blobs);
         //blobs = Collections.singletonList(blobs.get(0));
+        if (blobs != null && !blobs.isEmpty()) {
+            RobotContainer.DBTelemetry.addData("detection size", blobs.get(0).getBoxFit().center);
+        }
+
         return blobs;
     }
 

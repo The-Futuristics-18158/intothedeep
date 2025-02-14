@@ -121,6 +121,7 @@ public class ShoulderJoint extends SubsystemBase {
 
     }
 
+
     /** returns current position of shoulder (in deg)*/
     public double getAnalogPosition() {
         // note: posSensor.getMaxVoltage() returns a constant of 3.3V
@@ -163,7 +164,7 @@ public class ShoulderJoint extends SubsystemBase {
         }
         else // down
         {
-            constraint = new TrapezoidProfile.Constraints(500.0, 300.0);
+            constraint = new TrapezoidProfile.Constraints(500.0, 350.0);
             positionController.setPID(0.025, 0.18, 0.002); // was 0.02 i=0.07
         }
 
