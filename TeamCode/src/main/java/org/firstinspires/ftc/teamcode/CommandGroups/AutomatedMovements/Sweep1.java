@@ -22,19 +22,6 @@ public class Sweep1 extends SequentialCommandGroup {
     public Sweep1() {
 
         addCommands (
-                //new InstantCommand(()-> RobotContainer.odometry.setCurrentPos(new Pose2d(-0.40,1.6,new Rotation2d(Math.toRadians(-90))))),
-
-                //sweep 1
-
-//                new FollowPath(
-//                        1.0,
-//                        1.0,
-//                        0.0,
-//                        0.0,
-//                        AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(90.0))),
-//                        new ArrayList<Translation2d>() {{new Translation2d(-0.6,1.2); }},
-//                        AutoFunctions.redVsBlue(new Pose2d(-1.2, 0.3, new Rotation2d(Math.toRadians(90.0)))),
-//                        AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(-90.0))))
 
                 new MoveToPose(
                         2.0,
@@ -46,6 +33,12 @@ public class Sweep1 extends SequentialCommandGroup {
                         2.0,
                         1.5,
                         AutoFunctions.redVsBlue(new Pose2d(-1.05, 0.25, new Rotation2d(Math.toRadians(-90.0))))
+                ),
+
+                new MoveToPose(
+                        2.0,
+                        1.5,
+                        AutoFunctions.redVsBlue(new Pose2d(-1.05, 1.35, new Rotation2d(Math.toRadians(-90.0))))
                 )
 
 
