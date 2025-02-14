@@ -113,6 +113,7 @@ public class ShoulderJoint extends SubsystemBase {
 
         // temporary for control tuning purposes
         RobotContainer.DBTelemetry.addData("MotorPower", motorPower*100.0);
+        //RobotContainer.DBTelemetry.addData("")
         RobotContainer.DBTelemetry.addData("Shoulder Enc(deg)", getEncoderPosition());
         RobotContainer.DBTelemetry.addData("Shoulder Anlg(deg)", getAnalogPosition());
         RobotContainer.DBTelemetry.addData("Target Shoulder Pos(deg)", targetPosition);
@@ -125,7 +126,8 @@ public class ShoulderJoint extends SubsystemBase {
         // note: posSensor.getMaxVoltage() returns a constant of 3.3V
         // (posSensor.getVoltage())
         //(157 * (1.0 - (posSensor.getVoltage() / posSensor.getMaxVoltage())))-5.0;
-        return (242 * (1.0 - (posSensor.getVoltage() / posSensor.getMaxVoltage())));
+        //(242* (1.0 - 1.2454075596*(posSensor.getVoltage() / posSensor.getMaxVoltage())))
+        return (-217.13*(posSensor.getVoltage() / posSensor.getMaxVoltage())+47.35)+180;
     }
 
     // in deg
