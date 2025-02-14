@@ -31,6 +31,7 @@ public class RightSide4SpecimenAuto extends SequentialCommandGroup {
                 // sets the starting position
                 new InstantCommand(() -> RobotContainer.odometry.setCurrentPos(AutoFunctions.redVsBlue(new Pose2d(-0.22, 1.57, new Rotation2d(Math.toRadians(-90)))))),
                 //makes sure the claw is closed
+                new ArmStowHigh(),
                 new CloseClaw(),
                 new Pause(0.25),
 
@@ -44,15 +45,15 @@ public class RightSide4SpecimenAuto extends SequentialCommandGroup {
                 new Sweep2(),
 
                 // starts placing again
-                new WallPickUp(),
+                //new WallPickUp(),
                 // placed 2
                 new PlaceSpecimenAddOffset(),
 
-                new WallPickUp(),
+                //new WallPickUp(),
                 // placed 3
                 new PlaceSpecimenAddOffset(),
 
-                new WallPickUp(),
+               // new WallPickUp(),
                 // placed 4
                 new PlaceSpecimenAddOffset(),
 

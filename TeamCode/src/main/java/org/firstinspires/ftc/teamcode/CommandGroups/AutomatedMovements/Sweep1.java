@@ -32,13 +32,13 @@ public class Sweep1 extends SequentialCommandGroup {
                 new MoveToPose(
                         2.0,
                         1.5,
-                        AutoFunctions.redVsBlue(new Pose2d(-1.05, 0.25, new Rotation2d(Math.toRadians(-90.0))))
+                        AutoFunctions.redVsBlue(new Pose2d(-1.1, 0.25, new Rotation2d(Math.toRadians(-90.0))))
                 ),
 
                 new MoveToPose(
                         2.0,
                         1.5,
-                        AutoFunctions.redVsBlue(new Pose2d(-1.05, 1.35, new Rotation2d(Math.toRadians(-90.0))))
+                        AutoFunctions.redVsBlue(new Pose2d(-1.1, 1.5, new Rotation2d(Math.toRadians(-45.0))))
                 )
 
 
