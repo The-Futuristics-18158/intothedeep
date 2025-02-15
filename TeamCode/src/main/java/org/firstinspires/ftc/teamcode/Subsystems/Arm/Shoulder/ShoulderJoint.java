@@ -1,13 +1,21 @@
 package org.firstinspires.ftc.teamcode.Subsystems.Arm.Shoulder;
 
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.command.button.Button;
+import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.Commands.Pause;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
 
@@ -33,15 +41,19 @@ public class ShoulderJoint extends SubsystemBase {
 
     double EncoderOffset;
 
+    TouchSensor shoulderButton;
 
     /** Place code here to initialize subsystem */
     public ShoulderJoint() {
 
-        // Creates a Servo using the hardware map
+        // Creates a DcMotor using the hardware map
         ShoulderMotor =  RobotContainer.ActiveOpMode.hardwareMap.get(DcMotorEx.class, "shoulderMotor");
 
         // create analog absolute position sensor
         posSensor = RobotContainer.ActiveOpMode.hardwareMap.get(AnalogInput.class, "shoulderPot");
+
+        // create a touch sensor
+        shoulderButton = RobotContainer.ActiveOpMode.hardwareMap.get(TouchSensor.class, "shoulderTouch");
 
         // create position controller // 0.025  0.025
         // note: p=0.035 and i=0.04 worked very well under no-load condition
@@ -80,7 +92,7 @@ public class ShoulderJoint extends SubsystemBase {
      */
     @Override
     public void periodic() {
-
+        RobotContainer.DBTelemetry .addData("Shoulder Button", shoulderButton.isPressed());
         // read should position
         double currentPosition = getEncoderPosition();
 
@@ -103,7 +115,7 @@ public class ShoulderJoint extends SubsystemBase {
 
             // drive motor
             // NOTE: COMMENT TO BE REMOVED ONCE CONTROL IS CONFIRMED
-            ShoulderMotor.setPower(motorPower);
+            ShoulderMotor.setPower(-0.2);
         }
         else {
             positionController.reset();
@@ -128,7 +140,8 @@ public class ShoulderJoint extends SubsystemBase {
         // (posSensor.getVoltage())
         //(157 * (1.0 - (posSensor.getVoltage() / posSensor.getMaxVoltage())))-5.0;
         //(242* (1.0 - 1.2454075596*(posSensor.getVoltage() / posSensor.getMaxVoltage())))
-        return (-217.13*(posSensor.getVoltage() / posSensor.getMaxVoltage())+47.35)+180;
+        double x = ((-217.13*(posSensor.getVoltage() / posSensor.getMaxVoltage())+47.35)+180);
+        return  0.0046*x*x + 0.2133*x -7.5152;
     }
 
     // in deg
@@ -147,6 +160,28 @@ public class ShoulderJoint extends SubsystemBase {
         // set motor encoder position
         double deg = getAnalogPosition();
         setEncoderPosition(deg);
+    }
+
+    public void ResetMotorPositionOnButton(){
+        if (shoulderButton.isPressed()){
+            setEncoderPosition(45.0);
+        }
+    }
+
+    public void MoveShoulderToButton()
+    {
+        RotateTo(55);
+        new Pause(0.2);
+        double i = 55;
+        while(!shoulderButton.isPressed() && RobotContainer.driverOp.getGamepadButton(GamepadKeys.Button.START).get()) {
+            i-=0.5;
+            RotateTo(i);
+            new Pause(0.5);
+        }
+        ResetMotorPositionOnButton();
+        ShoulderMotor.setPower(0.0);
+
+
     }
 
     /** Using the var ticks sets the motor encoder ticks to a set position*/

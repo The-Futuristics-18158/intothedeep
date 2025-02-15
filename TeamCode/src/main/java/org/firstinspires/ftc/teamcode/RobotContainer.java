@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.ArmStowHigh;
@@ -139,7 +140,7 @@ public class RobotContainer {
 
         //driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new FullClimb());
 
-        driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new FullClimb());
+        driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new SelectCommandOnMode(new FullClimb(), new InstantCommand(()->new ShoulderJoint().MoveShoulderToButton())) );
 
         driverOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(()->linearSlide.moveTo(SlideTargetHeight.SAMPLE_ZERO)));
 

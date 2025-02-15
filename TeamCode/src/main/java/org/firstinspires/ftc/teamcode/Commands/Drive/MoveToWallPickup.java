@@ -61,7 +61,7 @@ public class MoveToWallPickup extends CommandBase {
         if (detections!=null && !detections.isEmpty())
         {
             double piece_center_X = detections.get(0).getBoxFit().center.x;
-            double piece_center_Y = detections.get(0).getBoxFit().center.y;
+            /**double piece_center_Y = detections.get(0).getBoxFit().center.y;
             RobotContainer.DBTelemetry.addData("corrected sholder", correction_occured);
             if (!correction_occured) {
                 if (piece_center_Y > 160){
@@ -70,7 +70,7 @@ public class MoveToWallPickup extends CommandBase {
                     new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(60));
                 }
                 correction_occured = true;
-            }
+            }*/
             // determine sideways speed
             x_speed = xControl.calculate(320.0 - piece_center_X);
         }
