@@ -39,9 +39,9 @@ public class LeftSideAuto87Pts extends SequentialCommandGroup {
 
                 // put arm into stow position
                 // powers shoulder
-                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(122)),
+                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(70)),
                 // folds the elbow in 225
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(270)),
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(135)),
                 // folds the wrist in 45
                 new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(0)),
 

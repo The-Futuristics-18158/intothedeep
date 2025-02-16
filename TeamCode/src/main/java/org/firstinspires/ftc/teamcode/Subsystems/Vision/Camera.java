@@ -308,6 +308,11 @@ public class Camera extends SubsystemBase {
 
     }
 
+    // use this function to set vision processing mode of the camera
+    public VisionProcessorMode getVisionProcessingMode()
+    { return currentMode; }
+
+
 
 
     // ---------- Apriltag Access functions ----------

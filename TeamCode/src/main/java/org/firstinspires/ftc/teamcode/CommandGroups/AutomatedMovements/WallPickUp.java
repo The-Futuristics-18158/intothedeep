@@ -29,10 +29,10 @@ public class WallPickUp extends SequentialCommandGroup {
                         AutoFunctions.redVsBlue(new Pose2d(-1.2, 1.2, new Rotation2d(Math.toRadians(-90.0))))
                 ),
 
-                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(54)),
+                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(45)),
 
                 // folds the elbow in 270
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(270)),
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(265)),
 
                 // folds the wrist in 0
                 new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(85)),

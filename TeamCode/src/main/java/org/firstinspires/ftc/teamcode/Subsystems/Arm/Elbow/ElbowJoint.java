@@ -60,7 +60,7 @@ public class ElbowJoint extends SubsystemBase {
 
         // make a new profile
         // servo capable of
-        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(0.96, 0.7),
+        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(0.96, 4.0),
                 new TrapezoidProfile.State(servoPos,0.0),
                 startState);
 

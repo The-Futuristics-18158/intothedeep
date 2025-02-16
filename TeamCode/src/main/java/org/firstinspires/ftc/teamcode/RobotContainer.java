@@ -26,6 +26,7 @@ import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 import org.firstinspires.ftc.teamcode.Commands.Claw.ToggleClaw;
 import org.firstinspires.ftc.teamcode.Commands.SelectCommandOnMode;
 import org.firstinspires.ftc.teamcode.Commands.RecalibrateOdometry;
+import org.firstinspires.ftc.teamcode.Commands.ShoulderPositionResetDebounced;
 import org.firstinspires.ftc.teamcode.Commands.resetLift;
 import org.firstinspires.ftc.teamcode.Subsystems.Blinkin;
 import org.firstinspires.ftc.teamcode.Subsystems.FrontTouch;
@@ -93,6 +94,7 @@ public class RobotContainer {
     public static FrontTouch frontTouch;
     public static Trigger frontTouchTrigger; // Trigger to trigger recalcing of the odometry based on the frontTouch sensor being pressed.
     public static OperatingMode operatingMode;
+    public static Trigger shoulderPositionTrigger;
 
     //Angle of the robot at the start of auto
     public static double RedStartAngle = 90;
@@ -295,6 +297,12 @@ public class RobotContainer {
 
         /* set a new Trigger to trigger recalcing of the odometry based on the frontTouch sensor being pressed.*/
         frontTouchTrigger = new Trigger(() -> RobotContainer.frontTouch.hasTouched());
+
+        // should button used to reset position
+        shoulderPositionTrigger = new Trigger(()-> RobotContainer.shoulderJoint.getShoulderButton());
+        shoulderPositionTrigger.whenActive(new ShoulderPositionResetDebounced());
+
+
 
         //if (isRedAlliance){
         //    clawCamera.setVisionProcessingMode(VisionProcessorMode.RED_BLOB_ONLY);

@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.AutoPickUpOffGround;
 import org.firstinspires.ftc.teamcode.RobotContainer;
+import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
+
+import java.util.List;
 
 
 // command template
@@ -18,8 +21,8 @@ public class MoveToPickup extends CommandBase {
     ElapsedTime timer;
     // constructor
     public MoveToPickup() {
-        xControl = new PIDController(0.0016, 0, 0.000245);  // was 0.0032
-        yControl = new PIDController(0.0016, 0, 0.000245);  // was 0.0032
+        xControl = new PIDController(0.0024, 0.0008, 0.0);  // was d=0.000245
+        yControl = new PIDController(0.0024, 0.0008, 0.0);
 
         timer = new ElapsedTime();
         // add subsystem requirements (if any) - for example:
@@ -39,19 +42,30 @@ public class MoveToPickup extends CommandBase {
     // This method is called periodically while command is active
     @Override
     public void execute() {
-        double Target_X = 280.0; // was (double) (315 + 330) / 2 before flip // 269.0
-        double Target_Y = 280.0; // was (double) (325 + 315) / 2 before flip // 355.0  / was 320
+        double Target_X = 280.0; // was (double) (315 + 330) / 2 before flip
+        double Target_Y = 220.0; // was (double) (325 + 315) / 2 before flip // 355.0  / was 320
+
+        // get list of current blobs from camera
+        List<ColorBlobLocatorProcessor.Blob> blobList = RobotContainer.clawCamera.GetBlobDetections();
+
+        // get closest blob to camera target
+        ColorBlobLocatorProcessor.Blob blob = getClosestBlob(blobList, Target_X, Target_Y);
 
         // if piece is detected the move robot towards piece
         // otherwise, keep moving as per before
-        if (RobotContainer.piece_detected) {
-            xError = Target_X - RobotContainer.piece_center_X;
-            yError = Target_Y - RobotContainer.piece_center_Y;
+        if (blob!=null) {
+            xError = Target_X - blob.getBoxFit().center.x;
+            yError = Target_Y - blob.getBoxFit().center.y;
 
             double xSpeed = xControl.calculate(xError);
             double ySpeed = yControl.calculate(yError);
 
             RobotContainer.drivesystem.RobotDrive(ySpeed, xSpeed, 0);
+        }
+        else {
+            xControl.reset();
+            yControl.reset();
+            RobotContainer.drivesystem.RobotDrive(0, 0, 0);
         }
 
         if (xError>20 || yError>20) {
@@ -68,7 +82,7 @@ public class MoveToPickup extends CommandBase {
     // This method to return true only when command is to finish. Otherwise return false
     @Override
     public boolean isFinished() {
-        if (timer.seconds()>1.0) {
+        if (timer.seconds()>0.5) {
             RobotContainer.blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE);
             return true;
         }else {
@@ -82,5 +96,45 @@ public class MoveToPickup extends CommandBase {
     public void end(boolean interrupted) {
         RobotContainer.drivesystem.RobotDrive(0,0,0);
     }
+
+
+    // helper to return closest blob out of a list
+    ColorBlobLocatorProcessor.Blob getClosestBlob(List<ColorBlobLocatorProcessor.Blob> bloblist,
+                                                  double Target_X,
+                                                  double Target_Y) {
+
+        // do we have a list and list is not empty
+        if (bloblist!=null && !bloblist.isEmpty())
+        {
+            ColorBlobLocatorProcessor.Blob blob = bloblist.get(0);
+            double closest = (bloblist.get(0).getBoxFit().center.x- Target_X) * (bloblist.get(0).getBoxFit().center.x- Target_X) +
+                    (bloblist.get(0).getBoxFit().center.y- Target_Y) * (bloblist.get(0).getBoxFit().center.y- Target_Y);
+
+            // cycle through list and get blob nearest the target
+            for (int i=1; i< bloblist.size(); ++i)
+            {
+                double dist = (bloblist.get(i).getBoxFit().center.x- Target_X) * (bloblist.get(i).getBoxFit().center.x- Target_X) +
+                        (bloblist.get(i).getBoxFit().center.y- Target_Y) * (bloblist.get(i).getBoxFit().center.y- Target_Y);
+
+                // if found a closer blob, then select this one
+                if (dist < closest)
+                {
+                  blob = bloblist.get(i);
+                    closest = dist;
+                }
+            }
+
+            return blob;
+
+        }
+        else
+            return null;
+
+
+    }
+
+
+
+
 
 }

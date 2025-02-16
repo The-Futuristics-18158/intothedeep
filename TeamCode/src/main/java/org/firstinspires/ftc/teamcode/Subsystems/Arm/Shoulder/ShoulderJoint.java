@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
@@ -33,6 +34,8 @@ public class ShoulderJoint extends SubsystemBase {
 
     double EncoderOffset;
 
+   TouchSensor shoulderButton;
+
 
     /** Place code here to initialize subsystem */
     public ShoulderJoint() {
@@ -42,6 +45,9 @@ public class ShoulderJoint extends SubsystemBase {
 
         // create analog absolute position sensor
         posSensor = RobotContainer.ActiveOpMode.hardwareMap.get(AnalogInput.class, "shoulderPot");
+
+        // create shoulder position button
+        shoulderButton = RobotContainer.ActiveOpMode.hardwareMap.get(TouchSensor.class, "shoulderTouch");
 
         // create position controller // 0.025  0.025
         // note: p=0.035 and i=0.04 worked very well under no-load condition
@@ -127,7 +133,8 @@ public class ShoulderJoint extends SubsystemBase {
         // (posSensor.getVoltage())
         //(157 * (1.0 - (posSensor.getVoltage() / posSensor.getMaxVoltage())))-5.0;
         //(242* (1.0 - 1.2454075596*(posSensor.getVoltage() / posSensor.getMaxVoltage())))
-        return (-217.13*(posSensor.getVoltage() / posSensor.getMaxVoltage())+47.35)+180;
+        double x = ((-217.13*(posSensor.getVoltage() / posSensor.getMaxVoltage())+47.35)+180);
+        return  0.0046*x*x + 0.2133*x -7.5152;
     }
 
     // in deg
@@ -148,23 +155,43 @@ public class ShoulderJoint extends SubsystemBase {
         setEncoderPosition(deg);
     }
 
+    // returns status of shoulder button
+    public boolean getShoulderButton() {
+        return shoulderButton.isPressed();
+    }
+
+    public void ResetMotorPositionOnButton() {
+        // set encoder position
+        // set profile to null so encoder position is simply set and not other action taken
+        setEncoderPosition(45.0);
+        RotateTo(45.0);
+    }
+
     /** Using the var ticks sets the motor encoder ticks to a set position*/
     public void RotateTo(double degrees) {
+        RotateTo (degrees, false);
+    }
+    public void RotateTo(double degrees, boolean gentle) {
         double currpos = getEncoderPosition();
 
         TrapezoidProfile.Constraints constraint;
 
         // from testing, revise profile constraints depending if raising or lowering shoulder
         // raising shoulder (reducing degrees) seems to result in more overshoot requiring lower amax.
+        // maxVelocity of 500.0 degrees per second is rate limited to match the servos operating at
+        // 0.12s per 60 degrees.
         if( degrees < currpos) // 135->45 up
         {
-            constraint = new TrapezoidProfile.Constraints(500.0, 150.0);
+            constraint = new TrapezoidProfile.Constraints(500.0, 170.0);
             positionController.setPID(0.025, 0.18, 0.002); // was 0.020 i=0.1
         }
         else // down
         {
-            constraint = new TrapezoidProfile.Constraints(500.0, 300.0);
-            positionController.setPID(0.025, 0.18, 0.002); // was 0.02 i=0.07
+            if (!gentle)
+                constraint = new TrapezoidProfile.Constraints(500.0, 750.0);
+            else
+                constraint = new TrapezoidProfile.Constraints(500.0, 200.0);
+            positionController.setPID(0.05, 0.18, 0.002); // was 0.02 i=0.07
         }
 
 

@@ -58,7 +58,7 @@ public class MoveToWallPickup extends CommandBase {
             double piece_center_X = detections.get(0).getBoxFit().center.x;
 
             // determine sideways speed
-            x_speed = xControl.calculate(320.0 - piece_center_X);
+            x_speed = xControl.calculate(280.0 - piece_center_X); //320
         }
         else
             // no detection, do not move sideways

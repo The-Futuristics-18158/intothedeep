@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.utility.BlinkinColour;
+import org.firstinspires.ftc.teamcode.utility.VisionProcessorMode;
 
 /**
  * The Blinkin class is a subsystem that controls the Rev Blinkin LED driver.
@@ -40,8 +41,15 @@ public class Blinkin extends SubsystemBase {
             counter=0;
         boolean blink = (counter>4);
 
-        // set blinkin for team color
-        if (RobotContainer.operatingMode.getSelectedMode() && blink)
+        // set blinkin colour
+        if (RobotContainer.clawCamera.getVisionProcessingMode() == VisionProcessorMode.YELLOW_BLOB_ONLY
+            && !RobotContainer.clawCamera.GetBlobDetections().isEmpty())
+            setPattern(BlinkinColour.NEUTRAL_SAMPLE.getPattern());
+        else if ((RobotContainer.clawCamera.getVisionProcessingMode() == VisionProcessorMode.RED_BLOB_ONLY ||
+                RobotContainer.clawCamera.getVisionProcessingMode() == VisionProcessorMode.BLUE_BLOB_ONLY ) &&
+                !RobotContainer.clawCamera.GetBlobDetections().isEmpty())
+            setPattern(BlinkinColour.ALLIANCE_SAMPLE.getPattern());
+        else if (RobotContainer.operatingMode.getSelectedMode() && blink)
             setPattern(BlinkinColour.NO_INFORMATION.getPattern());
         else if (RobotContainer.isRedAlliance)
             setPattern(BlinkinColour.RED_ALLIANCE.getPattern());
