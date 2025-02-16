@@ -11,7 +11,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.ArmStowHigh;
@@ -94,6 +93,7 @@ public class RobotContainer {
     public static FrontTouch frontTouch;
     public static Trigger frontTouchTrigger; // Trigger to trigger recalcing of the odometry based on the frontTouch sensor being pressed.
     public static OperatingMode operatingMode;
+    public static Trigger shoulderButtonTrigger;
 
     //Angle of the robot at the start of auto
     public static double RedStartAngle = 90;
@@ -140,7 +140,8 @@ public class RobotContainer {
 
         //driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new FullClimb());
 
-        driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new SelectCommandOnMode(new FullClimb(), new InstantCommand(()->new ShoulderJoint().MoveShoulderToButton())) );
+        driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new SelectCommandOnMode(new FullClimb(),
+                null));
 
         driverOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(()->linearSlide.moveTo(SlideTargetHeight.SAMPLE_ZERO)));
 
@@ -296,6 +297,9 @@ public class RobotContainer {
 
         /* set a new Trigger to trigger recalcing of the odometry based on the frontTouch sensor being pressed.*/
         frontTouchTrigger = new Trigger(() -> RobotContainer.frontTouch.hasTouched());
+
+        shoulderButtonTrigger = new Trigger(()-> RobotContainer.shoulderJoint.getShoulderButton());
+        shoulderButtonTrigger.whenActive(()-> RobotContainer.shoulderJoint.ResetMotorPositionOnButton());
 
         //if (isRedAlliance){
         //    clawCamera.setVisionProcessingMode(VisionProcessorMode.RED_BLOB_ONLY);

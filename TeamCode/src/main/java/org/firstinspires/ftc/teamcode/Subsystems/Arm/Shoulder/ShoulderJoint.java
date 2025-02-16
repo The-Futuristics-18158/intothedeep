@@ -162,13 +162,19 @@ public class ShoulderJoint extends SubsystemBase {
         setEncoderPosition(deg);
     }
 
-    public void ResetMotorPositionOnButton(){
-        if (shoulderButton.isPressed()){
-            setEncoderPosition(45.0);
-        }
+    public boolean getShoulderButton(){
+
+        return shoulderButton.isPressed();
     }
 
-    public void MoveShoulderToButton()
+
+    public void ResetMotorPositionOnButton(){
+
+            setEncoderPosition(45.0);
+            profile=null;
+    }
+
+    /*public void MoveShoulderToButton()
     {
         RotateTo(55);
         new Pause(0.2);
@@ -182,7 +188,7 @@ public class ShoulderJoint extends SubsystemBase {
         ShoulderMotor.setPower(0.0);
 
 
-    }
+    } */
 
     /** Using the var ticks sets the motor encoder ticks to a set position*/
     public void RotateTo(double degrees) {
