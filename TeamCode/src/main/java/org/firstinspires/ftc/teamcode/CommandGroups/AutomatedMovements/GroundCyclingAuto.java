@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.geometry.Translation2d;
 import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.ArmStowHigh;
 import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.DropToGrab;
 import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.HuntingPos;
+import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.PreBackDepositPose;
 import org.firstinspires.ftc.teamcode.Commands.Claw.CloseClaw;
 import org.firstinspires.ftc.teamcode.Commands.Drive.FollowPath;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
@@ -34,20 +35,20 @@ public class GroundCyclingAuto extends SequentialCommandGroup {
                 new MoveToPose(
                         2.0,
                         0.7,
-                        AutoFunctions.redVsBlue(new Pose2d(1.49, 1.02, new Rotation2d(Math.toRadians(-90))))
+                        AutoFunctions.redVsBlue(new Pose2d(1.46, 1.06, new Rotation2d(Math.toRadians(-90))))
                 ),
 
                 new HuntingPos(),
 
                 new DropToGrab(),
                 // this timer is for debounce
-                new Pause(0.5),
+                new Pause(0.7),
 
                 new CloseClaw(),
 
                 new Pause(0.25),
 
-                new ArmStowHigh(),
+                new PreBackDepositPose(),
 
                 // raise elevator to be ready to drop off
                 new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMPLE_HIGH)),
@@ -58,20 +59,20 @@ public class GroundCyclingAuto extends SequentialCommandGroup {
                 new MoveToPose(
                         2.0,
                         0.7,
-                        AutoFunctions.redVsBlue(new Pose2d(1.25, 1.02, new Rotation2d(Math.toRadians(-90))))
+                        AutoFunctions.redVsBlue(new Pose2d(1.27, 1.06, new Rotation2d(Math.toRadians(-90))))
                 ),
 
                 new HuntingPos(),
 
                 new DropToGrab(),
 
-                new Pause(0.5),
+                new Pause(0.7),
 
                 new CloseClaw(),
 
                 new Pause(0.25),
 
-                new ArmStowHigh(),
+                new PreBackDepositPose(),
 
                 // raise elevator to be ready to drop off
                 new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMPLE_HIGH)),
@@ -86,22 +87,22 @@ public class GroundCyclingAuto extends SequentialCommandGroup {
                         0.0,
                       AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(-90))),
                       new ArrayList<Translation2d>() {{ }},
-                      AutoFunctions.redVsBlue(new Pose2d(1.57, 0.99, new Rotation2d(Math.toRadians(-64)))),
+                      AutoFunctions.redVsBlue(new Pose2d(1.55, 1.01, new Rotation2d(Math.toRadians(-56)))),
                       AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(-64)))),
 
                 new HuntingPos(),
 
-                new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(5)),
+                new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(23)),
 
                 new DropToGrab(),
 
-                new Pause(0.5),
+                new Pause(0.7),
 
                 new CloseClaw(),
 
                 new Pause(0.25),
 
-                new ArmStowHigh(),
+                new PreBackDepositPose(),
 
                 new Pause(1.0),
 

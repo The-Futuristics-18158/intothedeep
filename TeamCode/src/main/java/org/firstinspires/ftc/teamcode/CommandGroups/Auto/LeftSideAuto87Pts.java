@@ -50,18 +50,16 @@ public class LeftSideAuto87Pts extends SequentialCommandGroup {
                 // move slide up to get ready for drop off
                 new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMPLE_HIGH)),
 
-
                 // drop off first sample into bucket
                 new HighBucketDeposit(),
 
                 // pickup all three and cycling in high bucket
                 new GroundCyclingAuto(),
 
-
                 new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(132)),
 
                 // folds the elbow in 270
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(250)),
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(240)),
 
                 // folds the wrist in 0
                 new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(0)),
@@ -71,9 +69,6 @@ public class LeftSideAuto87Pts extends SequentialCommandGroup {
 
                 new OpenClaw(),
                 // move to park position
-
-
-
                 new FollowPath(
                         2.0,
                         1.0,
@@ -87,8 +82,6 @@ public class LeftSideAuto87Pts extends SequentialCommandGroup {
                 new AutoRecalibrateOdometry(),
 
                 new RecalibrateOdometry()
-
-
 
         );
 

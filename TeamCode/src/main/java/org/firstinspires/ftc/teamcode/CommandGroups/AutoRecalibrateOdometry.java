@@ -31,13 +31,13 @@ public class AutoRecalibrateOdometry extends SequentialCommandGroup {
 
     }
 
-    @Override
-    public boolean isFinished() {
-
-        boolean hasTouched = RobotContainer.frontTouch.hasTouched();
-
-        return hasTouched;
-
-    }
+//    @Override
+//    public boolean isFinished() {
+//
+//        boolean hasTouched = RobotContainer.frontTouch.hasTouched();
+//
+//        return hasTouched;
+//
+//    }
 }
 

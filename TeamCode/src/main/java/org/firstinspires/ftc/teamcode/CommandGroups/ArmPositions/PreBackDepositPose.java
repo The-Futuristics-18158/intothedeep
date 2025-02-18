@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
 // Example Sequential Command Group
@@ -10,23 +11,21 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
 // ParallelRaceGroup
 // ParallelDeadlineGroup
 
-public class BackDepositPose extends SequentialCommandGroup {
+public class PreBackDepositPose extends SequentialCommandGroup {
 
     // constructor
-    public BackDepositPose() {
+    public PreBackDepositPose() {
 
         addCommands (
 
-                // lifts the shoulder up 45 degrees
+                // put arm into stow position
+                // powers shoulder
                 new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(45)),
+                // folds the elbow in 225
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(135)),
+                // folds the wrist in 45
+                new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(0)),
 
-                // folds the elbow in 60 degrees
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(160)),
-
-                // folds the wrist in 135 degrees
-                new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(180)),
-
-                // folds the wrist in 135 degrees
                 new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(180))
 
 
