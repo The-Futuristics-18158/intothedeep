@@ -33,12 +33,12 @@ public class FullClimb extends SequentialCommandGroup {
                         0.0,
                         AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(180))),
                         new ArrayList<Translation2d>() {{ }},
-                        AutoFunctions.redVsBlue(new Pose2d(0.58, 0.25, new Rotation2d(Math.toRadians(180.0)))),
+                        AutoFunctions.redVsBlue(new Pose2d(0.56, 0.25, new Rotation2d(Math.toRadians(180.0)))),
                         AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(0.0)))),
 
                 new Pause(1),
 
-                new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMPLE_LOW, true)),
+                new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMPLE_CLIMB, true)),
 
                 new Pause(1),
 

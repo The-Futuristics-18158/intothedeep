@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.ArmStowHigh;
 import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.BackDepositPose;
+import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.PreBackDepositPose;
 import org.firstinspires.ftc.teamcode.Commands.Drive.FollowPath;
 import org.firstinspires.ftc.teamcode.Commands.Claw.OpenClaw;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
@@ -28,6 +29,8 @@ public class HighBucketDeposit extends SequentialCommandGroup {
     public HighBucketDeposit() {
 
         addCommands (
+
+                new PreBackDepositPose(),
 
                 new MoveToPose(
                         2.0,

@@ -182,7 +182,7 @@ public class ShoulderJoint extends SubsystemBase {
         // 0.12s per 60 degrees.
         if( degrees < currpos) // 135->45 up
         {
-            constraint = new TrapezoidProfile.Constraints(500.0, 170.0);
+            constraint = new TrapezoidProfile.Constraints(500.0, 170.0);// was 170
             positionController.setPID(0.025, 0.18, 0.002); // was 0.020 i=0.1
         }
         else // down

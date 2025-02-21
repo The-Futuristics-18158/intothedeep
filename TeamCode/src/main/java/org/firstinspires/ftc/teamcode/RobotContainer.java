@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -24,6 +25,7 @@ import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.WallPickU
 import org.firstinspires.ftc.teamcode.Commands.Drive.GoToNextDropOff;
 import org.firstinspires.ftc.teamcode.Commands.Drive.ManualDrive;
 import org.firstinspires.ftc.teamcode.Commands.Claw.ToggleClaw;
+import org.firstinspires.ftc.teamcode.Commands.Pause;
 import org.firstinspires.ftc.teamcode.Commands.SelectCommandOnMode;
 import org.firstinspires.ftc.teamcode.Commands.RecalibrateOdometry;
 import org.firstinspires.ftc.teamcode.Commands.ShoulderPositionResetDebounced;

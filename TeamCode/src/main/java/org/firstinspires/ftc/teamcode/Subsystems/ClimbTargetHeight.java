@@ -5,7 +5,7 @@ public enum ClimbTargetHeight {
     // Constants that store the ticks for the linear slide levels
 
     SAMPLE_CLIMB_ZERO(0),
-    SAMPLE_LIFT(2580); // was 2381 before changing the fenders
+    SAMPLE_LIFT(2850); // was 2381 before changing the fenders
 
 
 
