@@ -12,6 +12,9 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
  * 0° is down*/
 public class ElbowJoint extends SubsystemBase {
 
+    /**Adds an offset everywhere the elbow's RotateTo is used*/
+    public int elbowServoOffset = 0;
+
     // Create wrist Servo
     /**0° is down*/
     private final Servo ElbowServo;
@@ -41,7 +44,7 @@ public class ElbowJoint extends SubsystemBase {
     }
 
 
-    // Turns the Servo a set amount of degrees
+    /**Turns the Servo a set amount of degrees*/
     public void RotateTo(int degrees){
 
         // Converts degrees into 0-1 float

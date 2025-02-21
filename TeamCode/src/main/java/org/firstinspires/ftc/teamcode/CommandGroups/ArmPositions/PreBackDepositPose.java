@@ -22,7 +22,7 @@ public class PreBackDepositPose extends SequentialCommandGroup {
                 // powers shoulder
                 new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(45)),
                 // folds the elbow in 225
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(135)),
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(135 + RobotContainer.elbowJoint.elbowServoOffset)),
                 // folds the wrist in 45
                 new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(0)),
 

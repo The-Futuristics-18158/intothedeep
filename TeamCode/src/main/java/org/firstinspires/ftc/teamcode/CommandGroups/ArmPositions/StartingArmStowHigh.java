@@ -23,7 +23,7 @@ public class StartingArmStowHigh extends SequentialCommandGroup {
                 //powers shoulder
                 new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(60)),
                 // folds the elbow in 270
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(270)),
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(270 + RobotContainer.elbowJoint.elbowServoOffset)),
 
                 new Pause(1.5),
                 // lifts the shoulder up 90+-60 degrees

@@ -21,7 +21,7 @@ public class DepositPos extends SequentialCommandGroup {
                 new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(118)),
 
                 // folds the elbow in 10
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(200)),
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(200 + RobotContainer.elbowJoint.elbowServoOffset)),
 
                 // folds the wrist in 10
                 new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(70)),

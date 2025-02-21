@@ -21,7 +21,7 @@ public class DropToGrab extends SequentialCommandGroup {
                 new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(45)),
 
                 // intermediate position to ease impact on ground (and on the piece)
-                new InstantCommand(() -> RobotContainer.elbowJoint.RotateTo(145)),
+                new InstantCommand(() -> RobotContainer.elbowJoint.RotateTo(145 + RobotContainer.elbowJoint.elbowServoOffset)),
 
                 // moves shoulder to 158 degrees so slightly down from hunting pos
                 new InstantCommand(() -> RobotContainer.shoulderJoint.RotateTo(150)),
@@ -33,7 +33,7 @@ public class DropToGrab extends SequentialCommandGroup {
                 new InstantCommand(() -> RobotContainer.shoulderJoint.RotateTo(159, true)),
 
                 // intermediate position to ease impact on ground (and on the piece)
-                new InstantCommand(() -> RobotContainer.elbowJoint.RotateTo(145))
+                new InstantCommand(() -> RobotContainer.elbowJoint.RotateTo(145 + RobotContainer.elbowJoint.elbowServoOffset))
 
         );
 

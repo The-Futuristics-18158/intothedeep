@@ -41,7 +41,7 @@ public class LeftSideAuto87Pts extends SequentialCommandGroup {
                 // powers shoulder
                 new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(70)),
                 // folds the elbow in 225
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(135)),
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(135 + RobotContainer.elbowJoint.elbowServoOffset)),
                 // folds the wrist in 45
                 new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(0)),
 
@@ -59,7 +59,7 @@ public class LeftSideAuto87Pts extends SequentialCommandGroup {
                 new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(132)),
 
                 // folds the elbow in 270
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(240)),
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(240 + RobotContainer.elbowJoint.elbowServoOffset)),
 
                 // folds the wrist in 0
                 new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(0)),

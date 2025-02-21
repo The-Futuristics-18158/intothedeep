@@ -21,7 +21,7 @@ public class WallViewPos extends SequentialCommandGroup {
                 new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(43)),
 
                 // folds the elbow in 270
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(266)),
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(266 + RobotContainer.elbowJoint.elbowServoOffset)),
 
                 // folds the wrist in 0
                 new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(100)),
