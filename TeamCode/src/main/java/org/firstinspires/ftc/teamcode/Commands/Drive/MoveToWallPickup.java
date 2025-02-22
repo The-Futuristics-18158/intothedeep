@@ -66,7 +66,7 @@ public class MoveToWallPickup extends CommandBase {
 
 
         // determine forward speed (m/s)
-        y_speed = 0.20;
+        y_speed = 0.180;//was 0.20
 
         // if on red alliance, field directions are opposite
         if (RobotContainer.isRedAlliance())

@@ -72,7 +72,7 @@ public class GroundCyclingAuto extends SequentialCommandGroup {
 
                 new Pause(0.25),
 
-                new PreBackDepositPose(),
+               // new PreBackDepositPose(),
 
                 // raise elevator to be ready to drop off
                 new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMPLE_HIGH)),
@@ -102,9 +102,9 @@ public class GroundCyclingAuto extends SequentialCommandGroup {
 
                 new Pause(0.25),
 
-                new PreBackDepositPose(),
+                //new PreBackDepositPose(),
 
-                new Pause(1.0),
+                new Pause(0.25),
 
                 // raise elevator to be ready to drop off
                 new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMPLE_HIGH)),

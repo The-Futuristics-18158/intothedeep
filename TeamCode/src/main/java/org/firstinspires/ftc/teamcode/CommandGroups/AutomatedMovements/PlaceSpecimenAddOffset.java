@@ -39,18 +39,39 @@ public class PlaceSpecimenAddOffset extends SequentialCommandGroup {
                 new MoveToPose(
                         1.5,
                         1.0,
-                        AutoFunctions.redVsBlue(new Pose2d(0.0, 0.820, new Rotation2d(Math.toRadians(-90))))
-                ),
+                        AutoFunctions.redVsBlue(new Pose2d(0.0, 0.740, new Rotation2d(Math.toRadians(-90))))),// was 0.820
+//
+//                new GoToNextDropOff(
+//                        1.5,
+//                        1.0,
+//                        0.0,
+//                        0.0,
+//                        AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(-35))),
+//                        new ArrayList<Translation2d>() {{ }},
+//                        AutoFunctions.redVsBlue(new Pose2d(-0.12, 0.740, new Rotation2d(Math.toRadians(-90)))),
+//                        AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(-90)))),
 
-                new GoToNextDropOff(
+                new FollowPath(
                         1.5,
                         1.0,
                         0.0,
                         0.0,
                         AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(-35))),
                         new ArrayList<Translation2d>() {{ }},
-                        AutoFunctions.redVsBlue(new Pose2d(-0.12, 0.740, new Rotation2d(Math.toRadians(-90)))),
+                        AutoFunctions.redVsBlue(new Pose2d(-0.15, 0.740, new Rotation2d(Math.toRadians(-90)))),
                         AutoFunctions.redVsBlue(new Rotation2d(Math.toRadians(-90)))),
+
+                new Pause(0.15),
+
+                new MoveToPose(
+                        1.5,
+                        1.0,
+                        AutoFunctions.redVsBlue(new Pose2d(-0.10, 0.740, new Rotation2d(Math.toRadians(-90))))),
+
+                new MoveToPose(
+                        1.5,
+                        1.0,
+                        AutoFunctions.redVsBlue(new Pose2d(-0.13, 0.740, new Rotation2d(Math.toRadians(-90))))),
 
                 new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMLE_SPECIMEN, true)),
 
