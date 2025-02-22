@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
 public class ElbowJoint extends SubsystemBase {
 
     /**Adds an offset everywhere the elbow's RotateTo is used*/
-    public int elbowServoOffset = -5;
+    public int elbowServoOffset = -6;
 
     // Create wrist Servo
     /**0° is down*/

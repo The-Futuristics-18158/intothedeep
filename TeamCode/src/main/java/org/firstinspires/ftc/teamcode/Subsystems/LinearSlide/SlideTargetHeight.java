@@ -8,7 +8,7 @@ public enum SlideTargetHeight {
     SAMPLE_CLIMB(600),
     SAMPLE_LOW(750), // 750 ticks = 362mm
     SAMPLE_MEDIUM(1500), // 1500 ticks = 575mm
-    SAMPLE_HIGH(2200);// 2630 ticks = 880mm = max
+    SAMPLE_HIGH(2250);// 2630 ticks = 880mm = max
 
 
     // Stores ticks in var value

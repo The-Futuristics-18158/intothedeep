@@ -61,6 +61,13 @@ public class MoveToPickup extends CommandBase {
             double ySpeed = yControl.calculate(yError);
 
             RobotContainer.drivesystem.RobotDrive(ySpeed, xSpeed, 0);
+//            // determin angle of nearest blob
+//            int piece_angle = (int) Math.round(blob.getBoxFit().angle);
+//            if (blob.getBoxFit().size.width<blob.getBoxFit().size.height)
+//                piece_angle += 90;
+//
+//            // move wrist for angle
+//            RobotContainer.wristRotateServo.RotateTo(piece_angle, 90);
         }
         else {
             xControl.reset();

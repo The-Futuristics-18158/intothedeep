@@ -42,7 +42,7 @@ public class GroundCyclingAuto extends SequentialCommandGroup {
 
                 new DropToGrab(),
                 // this timer is for debounce
-                new Pause(0.7),
+                //new Pause(0.7),
 
                 new CloseClaw(),
 
@@ -66,7 +66,7 @@ public class GroundCyclingAuto extends SequentialCommandGroup {
 
                 new DropToGrab(),
 
-                new Pause(0.7),
+                //new Pause(0.7),
 
                 new CloseClaw(),
 
@@ -96,7 +96,7 @@ public class GroundCyclingAuto extends SequentialCommandGroup {
 
                 new DropToGrab(),
 
-                new Pause(0.7),
+                //new Pause(0.7),
 
                 new CloseClaw(),
 
@@ -104,7 +104,7 @@ public class GroundCyclingAuto extends SequentialCommandGroup {
 
                 //new PreBackDepositPose(),
 
-                new Pause(0.25),
+               // new Pause(0.25),
 
                 // raise elevator to be ready to drop off
                 new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMPLE_HIGH)),

@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.Sweep1;
 import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.Sweep2;
 import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.WallPickUp;
 import org.firstinspires.ftc.teamcode.Commands.Claw.CloseClaw;
+import org.firstinspires.ftc.teamcode.Commands.Claw.OpenClaw;
 import org.firstinspires.ftc.teamcode.Commands.Drive.MoveToPose;
 import org.firstinspires.ftc.teamcode.Commands.Pause;
 import org.firstinspires.ftc.teamcode.RobotContainer;
@@ -36,59 +37,114 @@ public class RightSide4SpecimenAuto extends SequentialCommandGroup {
                 new CloseClaw(),
                 new Pause(0.25),
 
-                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(70)),
+                new InstantCommand(() ->RobotContainer.shoulderJoint.RotateTo(35)),
                 // folds the elbow in 225
-                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(135 + RobotContainer.elbowJoint.elbowServoOffset)),
-                // folds the wrist in 45
-                new InstantCommand(() -> RobotContainer.flappyFlappyWrist.RotateTo(0)),
-
-                //new InstantCommand(() -> RobotContainer.wristRotateServo.RotateTo(180)),
-
+                new InstantCommand(() ->RobotContainer.elbowJoint.RotateTo(110 + RobotContainer.elbowJoint.elbowServoOffset)),
 
                 new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMPLE_LOW, true)),
 
-                new Pause(2.0),
+                new Pause(1.0),
 
                 new SpecimenPlacePos(),
 
+                new MoveToPose(
+                    1.5,
+                    1.0,
+                     AutoFunctions.redVsBlue(new Pose2d(-0.22, 1.2, new Rotation2d(Math.toRadians(-90))))
+                ),
 
-//                new MoveToPose(
-//                    1.5,
-//                    1.0,
-//                     AutoFunctions.redVsBlue(new Pose2d(-0.22, 1.2, new Rotation2d(Math.toRadians(-90))))
-//                ),
+                new MoveToPose(
+                        1.5,
+                        1.0,
+                        AutoFunctions.redVsBlue(new Pose2d(0.0, 0.740, new Rotation2d(Math.toRadians(-90))))),
 
+                new MoveToPose(
+                        1.5,
+                        1.0,
+                        AutoFunctions.redVsBlue(new Pose2d(-0.13, 0.740, new Rotation2d(Math.toRadians(-90))))),
 
+                new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMLE_SPECIMEN, true)),
+
+                new Pause(0.5),
+
+                new OpenClaw(),
+
+                new Pause(0.25),
+
+                new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMPLE_ZERO, true)),
 
                 //placed 1
-               new PlaceSpecimenAddOffset(),
-
-                // needed to keep out of way of sweep path
                 new ArmStowHigh(),
 
-                // gathers 2
+                // gathers 1
                 new Sweep1(),
-                //new Sweep2(),
 
                 // starts placing again
                 new WallPickUp(),
                 // placed 2
-                new PlaceSpecimenAddOffset(),
+                new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMPLE_LOW, true)),
 
-                new WallPickUp(),
-                // placed 3
-                new PlaceSpecimenAddOffset(),
+                new SpecimenPlacePos(),
+
+                new MoveToPose(
+                        1.5,
+                        1.0,
+                        AutoFunctions.redVsBlue(new Pose2d(-0.22, 1.2, new Rotation2d(Math.toRadians(-90))))
+                ),
+
+                new MoveToPose(
+                        1.5,
+                        1.0,
+                        AutoFunctions.redVsBlue(new Pose2d(0.0, 0.740, new Rotation2d(Math.toRadians(-90))))),
+
+                new MoveToPose(
+                        1.5,
+                        1.0,
+                        AutoFunctions.redVsBlue(new Pose2d(-0.13, 0.740, new Rotation2d(Math.toRadians(-90))))),
+
+                new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMLE_SPECIMEN, true)),
+
+
+                new Pause(0.5),
+
+                new OpenClaw(),
+
+                new Pause(0.25),
+
+                new Sweep2()
 
 //                new WallPickUp(),
-//                // placed 4
-//                new PlaceSpecimenAddOffset(),
+//                // placed 3
+//                new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMPLE_LOW, true)),
 //
+//                new SpecimenPlacePos(),
+//
+//                new MoveToPose(
+//                        1.5,
+//                        1.0,
+//                        AutoFunctions.redVsBlue(new Pose2d(-0.22, 1.2, new Rotation2d(Math.toRadians(-90))))
+//                ),
+//
+//                new MoveToPose(
+//                        1.5,
+//                        1.0,
+//                        AutoFunctions.redVsBlue(new Pose2d(0.0, 0.740, new Rotation2d(Math.toRadians(-90))))),
+//
+//                new MoveToPose(
+//                        1.5,
+//                        1.0,
+//                        AutoFunctions.redVsBlue(new Pose2d(-0.13, 0.740, new Rotation2d(Math.toRadians(-90))))),
+//
+//                new InstantCommand(()-> RobotContainer.linearSlide.moveTo(SlideTargetHeight.SAMLE_SPECIMEN, true)),
+//
+//                new Pause(0.5),
+//
+//                new OpenClaw(),
+
+                //new Pause(0.25),
+
                 // park
-                new MoveToPose(
-                    2.0,
-                    1.5,
-                    AutoFunctions.redVsBlue(new Pose2d(-1.2, 1.2, new Rotation2d(Math.toRadians(-90.0))))
-                )
+
 
         );
 
