@@ -133,62 +133,34 @@ public class RobotContainer {
         //driverOp.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new InstantCommand(()-> gyro.resetYawAngle(), gyro));
 
         driverOp.getGamepadButton(GamepadKeys.Button.BACK).whenHeld(new SelectCommandOnMode(new InstantCommand(()-> odometry.setCurrentPos(AutoFunctions.redVsBlue(
-        new Pose2d(0.14, 0.77, new Rotation2d(Math.toRadians(BlueStartAngle)))))),
+                new Pose2d(0.14, 0.77, new Rotation2d(Math.toRadians(BlueStartAngle)))))),
                 new resetLift()
-                ));
-
-        //driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new ExampleCommandGroup());
-
-        //driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new SweepAlliancePieces());
+        ));
 
         //driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new FullClimb());
 
-        driverOp.getGamepadButton(GamepadKeys.Button.START).whenHeld(new FullClimb());
-
-        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new InstantCommand(()->linearSlide.moveTo(SlideTargetHeight.SAMPLE_ZERO)));
-
-        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(new InstantCommand(()->linearSlide.moveTo(SlideTargetHeight.SAMPLE_LOW)));
-
-        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new InstantCommand(()->linearSlide.moveTo(SlideTargetHeight.SAMPLE_MEDIUM)));
-
-        driverOp.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(new InstantCommand(()->linearSlide.moveTo(SlideTargetHeight.SAMPLE_HIGH)));
-
         // Zoe: This provided as example use of mode switch to assign two commands to single button
-        driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new SelectCommandOnMode(
-                                                                new WallPickUp(),   // run this command when manual mode is off (default case)
-                                                                null)               // run this command when manual mode is active (blinking LEDs)
-                                                                );
+//        driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(new SelectCommandOnMode(
+//                                                                new WallPickUp(),   // run this command when manual mode is off (default case)
+//                                                                null)               // run this command when manual mode is active (blinking LEDs)
+//                                                                );
 
-        //driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(new DropToGrab());
-
-        //driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new PlaceSpecimenAddOffset());
-
-        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new SelectCommandOnMode(
-                new PlaceSpecimenAddOffset(),// run this command when manual mode is off (default case)
-                new PickupFromSubmersible()) // run this command when manual mode is active (blinking LEDs)
-        );
-
-        //driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new AutoPickUpOffGround());//BackDepositePose().
-
-        //driverOp.getGamepadButton(GamepadKeys.Button.Y).whenHeld(new HighBucketDeposit());
-
-        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenHeld(new SelectCommandOnMode(
-                new HighBucketDeposit(),   // run this command when manual mode is off (default case)
-                new BackDepositPose())     // run this command when manual mode is active (blinking LEDs)
-        );
-
-        // Changed this to a single button with integration of HuntingPos as start of AutoPickupOffGround
-        driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new AutoPickUpOffGround());
-
-//        driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new SelectCommandOnMode(
-//                new HuntingPos(),          // run this command when manual mode is off (default case)
-//                new AutoPickUpOffGround()) // run this command when manual mode is active (blinking LEDs)
+//        driverOp.getGamepadButton(GamepadKeys.Button.X).whenHeld(new SelectCommandOnMode(
+//                new PlaceSpecimenAddOffset(),// run this command when manual mode is off (default case)
+//                new PickupFromSubmersible()) // run this command when manual mode is active (blinking LEDs)
 //        );
 
-        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new ArmStowHigh());
+//        driverOp.getGamepadButton(GamepadKeys.Button.Y).whenHeld(new SelectCommandOnMode(
+//                new HighBucketDeposit(),   // run this command when manual mode is off (default case)
+//                new BackDepositPose())     // run this command when manual mode is active (blinking LEDs)
+//        );
 
-        // commented-out: right bumper is now monitored by ToggleClaw command
-        //driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(new OpenClaw());
+        // Changed this to a single button with integration of HuntingPos as start of AutoPickupOffGround
+        //driverOp.getGamepadButton(GamepadKeys.Button.B).whenHeld(new AutoPickUpOffGround());
+
+
+
+        driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new ArmStowHigh());
 
 
         // Controls the claw using bumpers
@@ -199,24 +171,8 @@ public class RobotContainer {
 
 
         // Bind a command to the front Touch Trigger
-        frontTouchTrigger.whenActive(new RecalibrateOdometry());
+        //frontTouchTrigger.whenActive(new RecalibrateOdometry());
 
-
-
-//        if (isRedAlliance){
-//            odometry.setCurrentPos(new Pose2d(0, 0, new Rotation2d(Math.toRadians(RedStartAngle))));
-//        } else {
-//            odometry.setCurrentPos(new Pose2d(0.8, 1.6, new Rotation2d(Math.toRadians(BlueStartAngle))));
-//        }
-
-
-        // driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenPressed(new ToggleClaw());
-
-        // example sequential command
-        //driverOp.getGamepadButton(GamepadKeys.Button.Y).whileHeld(new ExampleCommandGroup());
-
-        // example of binding more complex command to a button. This would be in a separate command file
-        // driverOp.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new ExampleCommand());
 
         // add other button commands here
         // Note: can trigger commands on
@@ -313,6 +269,7 @@ public class RobotContainer {
         //}
 
         GoToNextDropOff.initializeDestinationDecrement();
+
     }
 
     public static int piece_angle;
@@ -329,18 +286,7 @@ public class RobotContainer {
             hub.clearBulkCache();
         }
 
-        try {
-            piece_angle = (int) Math.round( clawCamera.GetBlobDetections().get(0).getBoxFit().angle);
-            if (clawCamera.GetBlobDetections().get(0).getBoxFit().size.width<clawCamera.GetBlobDetections().get(0).getBoxFit().size.height){
-                piece_angle += 90;
-            }
-            piece_center_X = clawCamera.GetBlobDetections().get(0).getBoxFit().center.x;
-            piece_center_Y = clawCamera.GetBlobDetections().get(0).getBoxFit().center.y;
-            piece_detected = true;
 
-        } catch (Exception e) {
-            piece_detected = false;
-        }
 
         //DBTelemetry.addData("Angle", piece_angle);
         //DBTelemetry.addData("Center X", piece_center_X);
