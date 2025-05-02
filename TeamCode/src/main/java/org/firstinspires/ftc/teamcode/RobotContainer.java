@@ -14,6 +14,8 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.VoltageUnit;
 import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.ArmStowHigh;
 import org.firstinspires.ftc.teamcode.CommandGroups.ArmPositions.BackDepositPose;
 import org.firstinspires.ftc.teamcode.CommandGroups.AutomatedMovements.AutoPickUpOffGround;
@@ -254,6 +256,7 @@ public class RobotContainer {
         // create list of robot control and expansion hubs
         // set each for manual caching - cache updated in periodic()
         allHubs = ActiveOpMode.hardwareMap.getAll(LynxModule.class);
+        //controlHub = ActiveOpMode.hardwareMap.get(LynxModule.class.)
         for (LynxModule hub : allHubs) {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
@@ -321,13 +324,24 @@ public class RobotContainer {
     public static double piece_center_Y;
     public static boolean piece_detected;
 
+    public static double current;
+    public static double voltage;
+
+    public static double driveCurrent;
+
+    public static double slideCurrent;
+
     // call this function periodically to operate scheduler
     public static void Periodic() {
 
         // clear I/O cache for robot control and expansion hubs
         for (LynxModule hub : allHubs) {
             hub.clearBulkCache();
+            current = hub.getCurrent(CurrentUnit.AMPS);
+            voltage = hub.getAuxiliaryVoltage(VoltageUnit.VOLTS); //wrong call
         }
+
+
 
         try {
             piece_angle = (int) Math.round( clawCamera.GetBlobDetections().get(0).getBoxFit().angle);
@@ -342,9 +356,16 @@ public class RobotContainer {
             piece_detected = false;
         }
 
+        driveCurrent = drivesystem.DriveCurrent();
+        slideCurrent = linearSlide.SlideCurrent();
+
         //DBTelemetry.addData("Angle", piece_angle);
         //DBTelemetry.addData("Center X", piece_center_X);
         //DBTelemetry.addData("Center Y", piece_center_Y);
+        DBTelemetry.addData("drive Current", driveCurrent);
+        DBTelemetry.addData("slide Current", slideCurrent);
+        DBTelemetry.addData("Amps", current*12);
+        DBTelemetry.addData("Voltage", voltage);
         //DBTelemetry.update();
 
         // actual interval time

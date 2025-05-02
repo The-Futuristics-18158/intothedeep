@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
 
@@ -121,6 +122,10 @@ public class LinearSlide extends SubsystemBase {
         // Puts the motors into position control mode
         leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public double SlideCurrent(){
+        return leftMotor.getCurrent(CurrentUnit.AMPS) + rightMotor.getCurrent(CurrentUnit.AMPS);
     }
 
 }

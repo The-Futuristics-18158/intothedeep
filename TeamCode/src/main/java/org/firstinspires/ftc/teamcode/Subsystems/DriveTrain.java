@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 
 /** DriveTrain Subsystem */
@@ -236,9 +237,13 @@ public class DriveTrain extends SubsystemBase {
         return speeds;
     }
 
-    /* returns the defined mecanum drive kinematics */
+    /** returns the defined mecanum drive kinematics */
     public MecanumDriveKinematics GetKinematics() {
         return driveKinematics;
+    }
+
+    public double DriveCurrent (){
+        return leftBackDrive.getCurrent(CurrentUnit.AMPS) + leftFrontDrive.getCurrent(CurrentUnit.AMPS) + rightBackDrive.getCurrent(CurrentUnit.AMPS) + rightFrontDrive.getCurrent(CurrentUnit.AMPS);
     }
 
     // Special motor control class - specifically tailored for drive motor control
